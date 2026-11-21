@@ -13,3 +13,4 @@ uploads/
 reports/
 training_data/
 .coverage
+dump.rdb
