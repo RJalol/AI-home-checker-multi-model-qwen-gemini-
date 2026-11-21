@@ -70,12 +70,41 @@ TIER_DEFAULTS: Dict[str, Tuple[str, str, Optional[str]]] = {
 
 _KNOWN_MODULES = ("qwen", "gemini", "glm", "claude", "openai")
 
+# HWCHECKER_PRESET=openai runs every text/photo tier on an OpenAI key alone (no Qwen, Gemini, GLM
+# or Claude key). It is meant for trying the pipeline out. Audio still needs a Gemini key: the
+# OpenAI chat models used here do not take recordings. Single entries are still overridable with
+# HWCHECKER_<TIER>_MODEL / _PROVIDER / _THINKING.
+OPENAI_PRESET: Dict[str, Tuple[str, str, Optional[str]]] = {
+    "router": ("openai", "gpt-6-luna", None),
+    "easy": ("openai", "gpt-6-luna", None),
+    "medium": ("openai", "gpt-6-luna", None),
+    "medium_alt": ("openai", "gpt-5.4-mini", None),
+    "hard": ("openai", "gpt-6.1-terra", None),
+    "hard_vision": ("openai", "gpt-6.1-terra", None),
+    "verification": ("openai", "gpt-5.4-mini", None),
+    "fallback": ("openai", "gpt-5.4-mini", None),
+}
+
+
+def active_preset() -> str:
+    return os.environ.get("HWCHECKER_PRESET", "").strip().lower()
+
+
+def allow_same_vendor_verification() -> bool:
+    """With a single vendor the second opinion has to come from another model of that vendor. Off by
+    default, because a sibling model tends to repeat its mistakes; the openai preset turns it on."""
+    flag = os.environ.get("HWCHECKER_ALLOW_SAME_VENDOR_VERIFY", "").strip().lower()
+    return flag in ("1", "true", "yes") or active_preset() == "openai"
+
 
 def resolve_tier_config(tier: str) -> Tuple[str, str, Optional[str]]:
     """(provider module, model name, normalised thinking) for `tier`, defaults + env overrides."""
     if tier not in TIER_DEFAULTS:
         raise ValueError(f"Unknown provider tier '{tier}'. Known tiers: {list(TIER_DEFAULTS)}")
-    module, model, thinking = TIER_DEFAULTS[tier]
+    preset = active_preset()
+    if preset and preset != "openai":
+        raise ValueError(f"HWCHECKER_PRESET='{preset}' is not known. Known presets: openai")
+    module, model, thinking = (OPENAI_PRESET if preset == "openai" else {}).get(tier) or TIER_DEFAULTS[tier]
     prefix = f"HWCHECKER_{tier.upper()}_"
     env_module = os.environ.get(prefix + "PROVIDER", "").strip().lower()
     env_model = os.environ.get(prefix + "MODEL", "").strip()

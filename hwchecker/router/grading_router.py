@@ -48,7 +48,7 @@ from hwchecker.infra.retry import RetryExhaustedError, call_with_retry
 from hwchecker.pipeline.ocr import needs_vision_ocr
 from hwchecker.pipeline.schema import grading_result_to_schema
 from hwchecker.providers.base import AIProviderError, GradingResult
-from hwchecker.providers.registry import config_fingerprint, get_provider
+from hwchecker.providers.registry import allow_same_vendor_verification, config_fingerprint, get_provider
 from hwchecker.subjects.registry import get_subject
 
 from .difficulty import detect_difficulty
@@ -112,6 +112,19 @@ _AUDIO_EXTENSIONS = {".mp3", ".wav", ".m4a", ".ogg"}
 
 # RQ's per-job deadline exception derives from Exception: it must NOT be treated as "this provider failed"
 from hwchecker.infra.deadline import JobDeadline as _JobDeadline  # noqa: E402
+
+
+def _vendor_of(provider) -> Optional[str]:
+    """The vendor behind a provider: its `vendor` attribute if it has one, else the name of the module
+    that defines its class (providers/qwen.py -> "qwen", providers/gemini.py -> "gemini", ...).
+    Providers did not set `vendor`, so before this the "never the grader's own vendor" rule did nothing."""
+    if provider is None:
+        return None
+    declared = getattr(provider, "vendor", None)
+    if isinstance(declared, str):
+        return declared
+    module = type(provider).__module__
+    return module.rsplit(".", 1)[-1] if module.startswith("hwchecker.providers.") else None
 
 
 class GradingRouterError(Exception):
@@ -309,7 +322,7 @@ class GradingRouter:
         vendor: a model re-checking a sibling from the same vendor tends to repeat its mistakes.
         """
         grader_name = getattr(graded_by, "name", None)
-        grader_vendor = getattr(graded_by, "vendor", None)
+        grader_vendor = _vendor_of(graded_by)
         for tier in _VERIFICATION_TIERS:
             try:
                 candidate = get_provider(tier)
@@ -317,7 +330,8 @@ class GradingRouter:
                 continue   # no key / SDK for this tier: try the next vendor
             if grader_name is not None and candidate.name == grader_name:
                 continue   # asking the same model again is not a second opinion
-            if grader_vendor is not None and getattr(candidate, "vendor", None) == grader_vendor:
+            if (grader_vendor is not None and _vendor_of(candidate) == grader_vendor
+                    and not allow_same_vendor_verification()):
                 continue
             if not _can_read(candidate, kind):
                 continue

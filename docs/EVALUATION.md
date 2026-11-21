@@ -76,3 +76,16 @@ The expected score is made by construction (correct 100, no working 90, unit or 
 then the mean). It is NOT a teacher's judgment. It finds crashes, broken file handling, weak subjects and big
 systematic errors; it cannot show the grader is as good as a teacher. Audio is not covered. The real golden set
 described above is still required before launch.
+
+## Trying it with an OpenAI key only
+
+    export OPENAI_API_KEY=...
+    export HWCHECKER_PRESET=openai
+    python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl
+
+The preset puts every text and photo tier on OpenAI: `gpt-6-luna` (router, easy, medium), `gpt-6.1-terra` (hard,
+hard photo), `gpt-5.4-mini` (second opinion, fallback). The second opinion then comes from a different model of the
+same vendor, which is weaker than a different vendor; the preset allows it on purpose. Audio is not covered without a
+Gemini key. Any tier can still be overridden, e.g. `HWCHECKER_MEDIUM_MODEL=gpt-5.4-mini`.
+Treat the result as a trial of the pipeline and the data, not as the quality or cost of the production setup:
+re-run the same set on the real multi-vendor setup before deciding.
