@@ -86,6 +86,8 @@ def validate_webhook_url(url: str, resolve: bool = True) -> str:
 
 
 def _master_secret() -> str:
+    if config.IS_PRODUCTION:
+        return config.WEBHOOK_SIGNING_SECRET   # never derived from the admin key in production
     return config.WEBHOOK_SIGNING_SECRET or config.INTERNAL_API_KEY
 
 

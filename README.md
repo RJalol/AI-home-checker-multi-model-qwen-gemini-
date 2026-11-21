@@ -725,6 +725,36 @@ where you have the consent of the students/parents/school and a retention and de
   shared object storage (S3-compatible) so every instance can read every
   file regardless of which one originally received the upload.
 
+## Production readiness (hardening, deployment, quality gate)
+
+What to turn on and how to run it. The details are in `docs/`:
+`DEPLOYMENT.md`, `RUNBOOK.md` (what to do when something breaks), `EVALUATION.md` (quality gate),
+`PRIVACY_AND_RETENTION.md`, `LAUNCH_CHECKLIST.md` (shadow mode, pilot, items that are not code).
+
+- **`APP_ENV=production`**: the API refuses to start with an unsafe configuration (empty
+  `INTERNAL_API_KEY`, missing `WEBHOOK_SIGNING_SECRET`, default database password, ...). In production
+  webhook secrets are never derived from the admin key.
+- **Input limits**: over-long fields answer HTTP 422 (not 500), `extra_instructions` is capped
+  (`MAX_EXTRA_INSTRUCTIONS_CHARS`), uploads are read with a hard size cap (HTTP 413), images with
+  too many pixels are refused before decoding (`MAX_IMAGE_PIXELS`).
+- **Per-organization limits** (`ORG_MAX_SUBMISSIONS_PER_MINUTE` / `_PER_DAY`, HTTP 429 with
+  `Retry-After`) and a regrade cap (`MAX_REGRADES_PER_SUBMISSION`). These are safety nets against a
+  leaked key or a CRM retry loop, not quotas: set them well above your real peak.
+- **Privacy**: originals are deleted `UPLOAD_RETENTION_DAYS` after approval (`retention.py`,
+  `POST /admin/retention`); `DELETE /submissions/{id}` erases a submission and its file on request;
+  a client retry no longer leaves an orphan file. Provider error text is logged, never shown to the CRM.
+- **Audit trail**: every approve / edit / regrade / erase is recorded in `review_events` (who, score
+  before and after). Send `reviewer_external_id` with `POST /submissions/{id}/review`.
+- **Schema migrations** (`migrations.py`): versioned, run once from `db.init_db()`. Add a new column
+  with a new migration entry, never by editing an old one.
+- **Metrics**: `GET /metrics` (admin key) in Prometheus text format; `deploy/alerts.yml` has starting alert rules.
+- **Deployment**: `Dockerfile`, `docker-compose.yml` (PostgreSQL, Redis, API, worker, reconciler,
+  daily retention), exact dependency versions in `requirements.lock` (regenerate with
+  `pip-compile --strip-extras -o requirements.lock requirements.txt`), CI in `.github/workflows/ci.yml`.
+- **Quality gate**: `python -m hwchecker.benchmarks.golden_eval eval/golden.jsonl` compares the AI with
+  teachers' scores on a golden set and exits non-zero when quality drops;
+  `python eval/make_injection_set.py` builds a prompt-injection test set.
+
 ## Phase 4: multi-model tiered grading (hwchecker/)
 
 A second, more elaborate grading engine lives in `hwchecker/` — a

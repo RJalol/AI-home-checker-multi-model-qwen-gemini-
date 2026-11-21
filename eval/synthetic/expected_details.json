@@ -1,0 +1,3458 @@
+[
+ {
+  "id": "syn-math-01",
+  "subject_id": "math",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: 2x + 6 = 28",
+    "gold": "x = 11",
+    "student_answer": "2x = 28 - 6 = 22, x = 11",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Find 15% of 80.",
+    "gold": "12",
+    "student_answer": "80 x 15/100 = 12",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "A rectangle has sides 4 cm and 12 cm. Find its area and perimeter.",
+    "gold": "area 48 cm^2, perimeter 32 cm",
+    "student_answer": "S = 4 x 12 = 48 cm^2; P = 2(4+12) = 32 cm",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Solve: x^2 + 2x - 15 = 0",
+    "gold": "x = 3 and x = -5",
+    "student_answer": "D = 64, sqrt(D) = 8; x1 = 3, x2 = -5",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Find the derivative of f(x) = 3x^4 + 4x.",
+    "gold": "f'(x) = 12x^3 + 4",
+    "student_answer": "f'(x) = 3*4x^3 + 4 = 12x^3 + 4",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-math-02",
+  "subject_id": "math",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Find the derivative of f(x) = 3x^5 + 5x.",
+    "gold": "f'(x) = 15x^4 + 5",
+    "student_answer": "f'(x) = 3*5x^4 + 5 = 15x^4 + 5",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Solve: 5x + 2 = 17",
+    "gold": "x = 3",
+    "student_answer": "5x = 17 - 2 = 15, x = 3",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Solve: x^2 + 4x - 12 = 0",
+    "gold": "x = 2 and x = -6",
+    "student_answer": "D = 64, sqrt(D) = 8; x1 = 2, x2 = -6",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Find 15% of 120.",
+    "gold": "18",
+    "student_answer": "120 x 15/100 = 18",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "A rectangle has sides 5 cm and 10 cm. Find its area and perimeter.",
+    "gold": "area 50 cm^2, perimeter 30 cm",
+    "student_answer": "S = 5 x 10 = 50 cm^2; P = 2(5+10) = 30 cm",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-math-03",
+  "subject_id": "math",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: x^2 + 0x - 4 = 0",
+    "gold": "x = 2 and x = -2",
+    "student_answer": "D = 16, sqrt(D) = 4; x1 = 2, x2 = -2",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Find the derivative of f(x) = 3x^3 + 3x.",
+    "gold": "f'(x) = 9x^2 + 3",
+    "student_answer": "f'(x) = 3*3x^2 + 3 = 9x^2 + 3",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Solve: 6x + 6 = 42",
+    "gold": "x = 6",
+    "student_answer": "6x = 36, x = 36/7",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "A rectangle has sides 6 cm and 13 cm. Find its area and perimeter.",
+    "gold": "area 78 cm^2, perimeter 38 cm",
+    "student_answer": "S = 38 cm^2, P = 78 cm",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Find 25% of 400.",
+    "gold": "100",
+    "student_answer": "400 x 25/100 = 100",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-math-04",
+  "subject_id": "math",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: x^2 + 0x - 4 = 0",
+    "gold": "x = 2 and x = -2",
+    "student_answer": "x = -2 and x = 2",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Solve: 5x + 9 = 34",
+    "gold": "x = 5",
+    "student_answer": "5x = 25, x = 25/6",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "Find the derivative of f(x) = 5x^5 + 5x.",
+    "gold": "f'(x) = 25x^4 + 5",
+    "student_answer": "5x^4 + 5x",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Find 10% of 250.",
+    "gold": "25",
+    "student_answer": "250 x 10/100 = 25",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "A rectangle has sides 9 cm and 15 cm. Find its area and perimeter.",
+    "gold": "area 135 cm^2, perimeter 48 cm",
+    "student_answer": "S = 48 cm^2, P = 135 cm",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-math-05",
+  "subject_id": "math",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: x^2 + 2x - 24 = 0",
+    "gold": "x = 4 and x = -6",
+    "student_answer": "x = 4, x = -6",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "Solve: 4x + 5 = 41",
+    "gold": "x = 9",
+    "student_answer": "x = 9",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "Find the derivative of f(x) = 3x^4 + 4x.",
+    "gold": "f'(x) = 12x^3 + 4",
+    "student_answer": "12x^3 + 4",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "Find 20% of 120.",
+    "gold": "24",
+    "student_answer": "24",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "A rectangle has sides 3 cm and 14 cm. Find its area and perimeter.",
+    "gold": "area 42 cm^2, perimeter 34 cm",
+    "student_answer": "S = 42 cm^2, P = 34 cm",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-math-06",
+  "subject_id": "math",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: 2x + 8 = 22",
+    "gold": "x = 7",
+    "student_answer": "2x = 22 - 8 = 14, x = 7",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Find the derivative of f(x) = 3x^5 + 5x.",
+    "gold": "f'(x) = 15x^4 + 5",
+    "student_answer": "3x^4 + 5x",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Solve: x^2 - 3x - 10 = 0",
+    "gold": "x = 5 and x = -2",
+    "student_answer": "D = 49, sqrt(D) = 7; x1 = 5, x2 = -2",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Find 15% of 400.",
+    "gold": "60",
+    "student_answer": "400 x 15 = 6000",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "A rectangle has sides 7 cm and 15 cm. Find its area and perimeter.",
+    "gold": "area 105 cm^2, perimeter 44 cm",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-math-07",
+  "subject_id": "math",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Find 20% of 80.",
+    "gold": "16",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Solve: x^2 + 2x - 3 = 0",
+    "gold": "x = 1 and x = -3",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Solve: 3x + 5 = 23",
+    "gold": "x = 6",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "A rectangle has sides 3 cm and 14 cm. Find its area and perimeter.",
+    "gold": "area 42 cm^2, perimeter 34 cm",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Find the derivative of f(x) = 3x^3 + 3x.",
+    "gold": "f'(x) = 9x^2 + 3",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-math-08",
+  "subject_id": "math",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Solve: x^2 - 3x - 4 = 0",
+    "gold": "x = 4 and x = -1",
+    "student_answer": "x = -4 and x = 1",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Solve: 6x + 5 = 59",
+    "gold": "x = 9",
+    "student_answer": "x = 10",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Find 20% of 80.",
+    "gold": "16",
+    "student_answer": "64",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "A rectangle has sides 6 cm and 10 cm. Find its area and perimeter.",
+    "gold": "area 60 cm^2, perimeter 32 cm",
+    "student_answer": "S = 32 cm^2, P = 60 cm",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Find the derivative of f(x) = 2x^4 + 4x.",
+    "gold": "f'(x) = 8x^3 + 4",
+    "student_answer": "2x^3 + 4x",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-01",
+  "subject_id": "physics",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A body of mass 2 kg accelerates at 6 m/s^2. Find the force.",
+    "gold": "12 N",
+    "student_answer": "F = m a = 2 x 6 = 12 N",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "How much heat is needed to warm 3 kg of water from 10 C to 60 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "630 kJ",
+    "student_answer": "Q = c m dT = 4200 x 3 x 50 = 630000 J = 630 kJ",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "A resistor of 2 ohm carries 3 A. Find the voltage.",
+    "gold": "6 V",
+    "student_answer": "U = I R = 3 x 2 = 6 V",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "A car moves at 90 km/h for 2 h. Find the distance.",
+    "gold": "180 km",
+    "student_answer": "s = v t = 90 x 2 = 180 km",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "A 2 kg body slides at 10 m/s and stops because of friction (mu = 0.5, g = 10). Find the work done by friction.",
+    "gold": "-100 J",
+    "student_answer": "A = -Ek = -2 x 10^2 / 2 = -100 J (friction opposes the motion)",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-02",
+  "subject_id": "physics",
+  "profile": "strong_slip",
+  "expected_score": 97,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A car moves at 72 km/h for 2 h. Find the distance.",
+    "gold": "144 km",
+    "student_answer": "s = v t = 72 x 2 = 144 km",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "A resistor of 3 ohm carries 6 A. Find the voltage.",
+    "gold": "18 V",
+    "student_answer": "U = I R = 6 x 3 = 18 V",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "How much heat is needed to warm 1 kg of water from 25 C to 80 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "231 kJ",
+    "student_answer": "Q = 4200 x 1 x 55 = 231000 J",
+    "outcome": "unit_format",
+    "score": 85
+   },
+   {
+    "q": 4,
+    "prompt": "A body of mass 9 kg accelerates at 4 m/s^2. Find the force.",
+    "gold": "36 N",
+    "student_answer": "F = m a = 9 x 4 = 36 N",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "A 4 kg body slides at 10 m/s and stops because of friction (mu = 0.2, g = 10). Find the work done by friction.",
+    "gold": "-200 J",
+    "student_answer": "A = -Ek = -4 x 10^2 / 2 = -200 J (friction opposes the motion)",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-03",
+  "subject_id": "physics",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A resistor of 8 ohm carries 2 A. Find the voltage.",
+    "gold": "16 V",
+    "student_answer": "U = I R = 2 x 8 = 16 V",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "A 5 kg body slides at 4 m/s and stops because of friction (mu = 0.5, g = 10). Find the work done by friction.",
+    "gold": "-40 J",
+    "student_answer": "A = -Ek = -5 x 4^2 / 2 = -40 J (friction opposes the motion)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "A car moves at 40 km/h for 2 h. Find the distance.",
+    "gold": "80 km",
+    "student_answer": "s = 40 / 2 = 20 km",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "A body of mass 6 kg accelerates at 3 m/s^2. Find the force.",
+    "gold": "18 N",
+    "student_answer": "9 N",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "How much heat is needed to warm 2 kg of water from 20 C to 60 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "336 kJ",
+    "student_answer": "Q = c m dT = 4200 x 2 x 40 = 336000 J = 336 kJ",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-04",
+  "subject_id": "physics",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A resistor of 2 ohm carries 3 A. Find the voltage.",
+    "gold": "6 V",
+    "student_answer": "5 V",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "A car moves at 60 km/h for 3 h. Find the distance.",
+    "gold": "180 km",
+    "student_answer": "s = 60 / 3 = 20 km",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "A body of mass 7 kg accelerates at 6 m/s^2. Find the force.",
+    "gold": "42 N",
+    "student_answer": "13 N",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "How much heat is needed to warm 3 kg of water from 20 C to 70 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "630 kJ",
+    "student_answer": "Q = c m dT = 4200 x 3 x 50 = 630000 J = 630 kJ",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "A 2 kg body slides at 6 m/s and stops because of friction (mu = 0.5, g = 10). Find the work done by friction.",
+    "gold": "-36 J",
+    "student_answer": "10 J",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-05",
+  "subject_id": "physics",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A car moves at 40 km/h for 1.5 h. Find the distance.",
+    "gold": "60 km",
+    "student_answer": "60 km",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "How much heat is needed to warm 2 kg of water from 25 C to 70 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "378 kJ",
+    "student_answer": "378 kJ",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "A 2 kg body slides at 6 m/s and stops because of friction (mu = 0.25, g = 10). Find the work done by friction.",
+    "gold": "-36 J",
+    "student_answer": "-36 J",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "A resistor of 7 ohm carries 5 A. Find the voltage.",
+    "gold": "35 V",
+    "student_answer": "35 V",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "A body of mass 3 kg accelerates at 2 m/s^2. Find the force.",
+    "gold": "6 N",
+    "student_answer": "6 N",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-06",
+  "subject_id": "physics",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A 2 kg body slides at 6 m/s and stops because of friction (mu = 0.2, g = 10). Find the work done by friction.",
+    "gold": "-36 J",
+    "student_answer": "A = -Ek = -2 x 6^2 / 2 = -36 J (friction opposes the motion)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "How much heat is needed to warm 2 kg of water from 10 C to 80 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "588 kJ",
+    "student_answer": "140 kJ",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "A car moves at 40 km/h for 3 h. Find the distance.",
+    "gold": "120 km",
+    "student_answer": "s = v t = 40 x 3 = 120 km",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "A body of mass 3 kg accelerates at 4 m/s^2. Find the force.",
+    "gold": "12 N",
+    "student_answer": "F = m / a = 0.75 N",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "A resistor of 3 ohm carries 5 A. Find the voltage.",
+    "gold": "15 V",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-07",
+  "subject_id": "physics",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A 4 kg body slides at 6 m/s and stops because of friction (mu = 0.25, g = 10). Find the work done by friction.",
+    "gold": "-72 J",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "How much heat is needed to warm 1 kg of water from 25 C to 70 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "189 kJ",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "A body of mass 5 kg accelerates at 6 m/s^2. Find the force.",
+    "gold": "30 N",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "A car moves at 72 km/h for 3 h. Find the distance.",
+    "gold": "216 km",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "A resistor of 9 ohm carries 6 A. Find the voltage.",
+    "gold": "54 V",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-phys-08",
+  "subject_id": "physics",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "A 2 kg body slides at 10 m/s and stops because of friction (mu = 0.25, g = 10). Find the work done by friction.",
+    "gold": "-100 J",
+    "student_answer": "5 J",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "A car moves at 72 km/h for 2.5 h. Find the distance.",
+    "gold": "180 km",
+    "student_answer": "179 km",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "A body of mass 5 kg accelerates at 4 m/s^2. Find the force.",
+    "gold": "20 N",
+    "student_answer": "9 N",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "A resistor of 9 ohm carries 6 A. Find the voltage.",
+    "gold": "54 V",
+    "student_answer": "15 V",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "How much heat is needed to warm 2 kg of water from 10 C to 80 C? c = 4200 J/(kg C). Answer in kJ.",
+    "gold": "588 kJ",
+    "student_answer": "140 kJ",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-01",
+  "subject_id": "chemistry",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "What is the atomic number of carbon?",
+    "gold": "6",
+    "student_answer": "6",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Balance the equation: Al + HCl -> AlCl3 + H2",
+    "gold": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "student_answer": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Find the molar mass of CaCO3 (g/mol).",
+    "gold": "100 g/mol",
+    "student_answer": "M(CaCO3) = 100 g/mol",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "15 g of salt is dissolved to make 150 g of solution. Find the mass fraction (%).",
+    "gold": "10 %",
+    "student_answer": "w = 15 / 150 x 100 = 10 %",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "How many moles are in 300 g of CaCO3?",
+    "gold": "3 mol",
+    "student_answer": "n = m / M = 300 / 100 = 3 mol",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-02",
+  "subject_id": "chemistry",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "What is the atomic number of carbon?",
+    "gold": "6",
+    "student_answer": "6",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Find the molar mass of CO2 (g/mol).",
+    "gold": "44 g/mol",
+    "student_answer": "M(CO2) = 44 g/mol",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "How many moles are in 120 g of NaOH?",
+    "gold": "3 mol",
+    "student_answer": "n = m / M = 120 / 40 = 3 mol",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Balance the equation: H2 + O2 -> H2O",
+    "gold": "2H2 + O2 -> 2H2O",
+    "student_answer": "2H2 + O2 -> 2H2O",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "12 g of salt is dissolved to make 240 g of solution. Find the mass fraction (%).",
+    "gold": "5 %",
+    "student_answer": "w = 12 / 240 x 100 = 5 %",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-03",
+  "subject_id": "chemistry",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Balance the equation: Al + HCl -> AlCl3 + H2",
+    "gold": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "student_answer": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Which gas is released when zinc reacts with hydrochloric acid?",
+    "gold": "hydrogen (H2)",
+    "student_answer": "hydrogen (H2)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "12 g of salt is dissolved to make 240 g of solution. Find the mass fraction (%).",
+    "gold": "5 %",
+    "student_answer": "w = 12 / (228) x 100 = 5.3 %",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "Find the molar mass of CaCO3 (g/mol).",
+    "gold": "100 g/mol",
+    "student_answer": "200 g/mol",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "How many moles are in 200 g of CaCO3?",
+    "gold": "2 mol",
+    "student_answer": "n = m / M = 200 / 100 = 2 mol",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-04",
+  "subject_id": "chemistry",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Balance the equation: Al + HCl -> AlCl3 + H2",
+    "gold": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "student_answer": "Al + HCl -> AlCl3 + H2",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "What is the chemical formula of table salt?",
+    "gold": "NaCl",
+    "student_answer": "NaCl (no explanation)",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "Find the molar mass of NaCl (g/mol).",
+    "gold": "58.5 g/mol",
+    "student_answer": "117 g/mol",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "15 g of salt is dissolved to make 150 g of solution. Find the mass fraction (%).",
+    "gold": "10 %",
+    "student_answer": "w = 15 / 150 x 100 = 10 %",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "How many moles are in 50 g of CaCO3?",
+    "gold": "0.5 mol",
+    "student_answer": "5000 mol",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-05",
+  "subject_id": "chemistry",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Find the molar mass of H2SO4 (g/mol).",
+    "gold": "98 g/mol",
+    "student_answer": "98",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "Balance the equation: Fe + O2 -> Fe2O3",
+    "gold": "4Fe + 3O2 -> 2Fe2O3",
+    "student_answer": "4Fe + 3O2 -> 2Fe2O3",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "12 g of salt is dissolved to make 240 g of solution. Find the mass fraction (%).",
+    "gold": "5 %",
+    "student_answer": "5 %",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "How many moles are in 20 g of NaOH?",
+    "gold": "0.5 mol",
+    "student_answer": "0.5 mol",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "What is the pH of a neutral solution at 25 C?",
+    "gold": "7",
+    "student_answer": "7",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-06",
+  "subject_id": "chemistry",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Balance the equation: Al + HCl -> AlCl3 + H2",
+    "gold": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "student_answer": "2Al + 6HCl -> 2AlCl3 + 3H2",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Find the molar mass of H2O (g/mol).",
+    "gold": "18 g/mol",
+    "student_answer": "36 g/mol",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "How many moles are in 300 g of CaCO3?",
+    "gold": "3 mol",
+    "student_answer": "n = m / M = 300 / 100 = 3 mol",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "What is the pH of a neutral solution at 25 C?",
+    "gold": "7",
+    "student_answer": "7 (no explanation)",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "30 g of salt is dissolved to make 300 g of solution. Find the mass fraction (%).",
+    "gold": "10 %",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-07",
+  "subject_id": "chemistry",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "How many moles are in 294 g of H2SO4?",
+    "gold": "3 mol",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "20 g of salt is dissolved to make 200 g of solution. Find the mass fraction (%).",
+    "gold": "10 %",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Balance the equation: H2 + O2 -> H2O",
+    "gold": "2H2 + O2 -> 2H2O",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "What is the chemical formula of table salt?",
+    "gold": "NaCl",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Find the molar mass of NaOH (g/mol).",
+    "gold": "40 g/mol",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-chem-08",
+  "subject_id": "chemistry",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Find the molar mass of CaCO3 (g/mol).",
+    "gold": "100 g/mol",
+    "student_answer": "200 g/mol",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Balance the equation: Fe + O2 -> Fe2O3",
+    "gold": "4Fe + 3O2 -> 2Fe2O3",
+    "student_answer": "Fe + O2 -> Fe2O3",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "How many moles are in 20 g of NaOH?",
+    "gold": "0.5 mol",
+    "student_answer": "800 mol",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "What is the pH of a neutral solution at 25 C?",
+    "gold": "7",
+    "student_answer": "0",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "30 g of salt is dissolved to make 300 g of solution. Find the mass fraction (%).",
+    "gold": "10 %",
+    "student_answer": "270 %",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-01",
+  "subject_id": "biology",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which organelle produces most of the cell's ATP?",
+    "gold": "mitochondria",
+    "student_answer": "mitochondria",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "What is the process by which plants make glucose from light?",
+    "gold": "photosynthesis",
+    "student_answer": "photosynthesis",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "How many chromosomes does a normal human body cell have?",
+    "gold": "46",
+    "student_answer": "46",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Name the molecule that carries genetic information.",
+    "gold": "DNA",
+    "student_answer": "DNA",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Which blood cells carry oxygen?",
+    "gold": "red blood cells (erythrocytes)",
+    "student_answer": "red blood cells (erythrocytes)",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-02",
+  "subject_id": "biology",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Name the molecule that carries genetic information.",
+    "gold": "DNA",
+    "student_answer": "DNA",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Which blood cells carry oxygen?",
+    "gold": "red blood cells (erythrocytes)",
+    "student_answer": "red blood cells (erythrocytes)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "What is the basic structural and functional unit of living things?",
+    "gold": "the cell",
+    "student_answer": "the cell",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Which gas do plants take in during photosynthesis?",
+    "gold": "carbon dioxide (CO2)",
+    "student_answer": "carbon dioxide (CO2)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Where does photosynthesis take place in a plant cell?",
+    "gold": "in the chloroplasts",
+    "student_answer": "in the chloroplasts",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-03",
+  "subject_id": "biology",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which gas do plants take in during photosynthesis?",
+    "gold": "carbon dioxide (CO2)",
+    "student_answer": "carbon dioxide (CO2)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Where does photosynthesis take place in a plant cell?",
+    "gold": "in the chloroplasts",
+    "student_answer": "in the chloroplasts",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "What do we call organisms that make their own food?",
+    "gold": "autotrophs (producers)",
+    "student_answer": "plants maybe",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "Which part of the cell contains the DNA in humans?",
+    "gold": "the nucleus",
+    "student_answer": "the ribosome",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "What is the function of ribosomes?",
+    "gold": "protein synthesis",
+    "student_answer": "protein synthesis",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-04",
+  "subject_id": "biology",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which part of the cell contains the DNA in humans?",
+    "gold": "the nucleus",
+    "student_answer": "the ribosome",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "What is the function of ribosomes?",
+    "gold": "protein synthesis",
+    "student_answer": "they work in the cell",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "Which vitamin is produced in skin under sunlight?",
+    "gold": "vitamin D",
+    "student_answer": "vitamin C",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Which organelle produces most of the cell's ATP?",
+    "gold": "mitochondria",
+    "student_answer": "mitochondria",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "What is the process by which plants make glucose from light?",
+    "gold": "photosynthesis",
+    "student_answer": "respiration",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-05",
+  "subject_id": "biology",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which organelle produces most of the cell's ATP?",
+    "gold": "mitochondria",
+    "student_answer": "mitochondria",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "What is the process by which plants make glucose from light?",
+    "gold": "photosynthesis",
+    "student_answer": "photosynthesis",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "How many chromosomes does a normal human body cell have?",
+    "gold": "46",
+    "student_answer": "46",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "Name the molecule that carries genetic information.",
+    "gold": "DNA",
+    "student_answer": "DNA",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "Which blood cells carry oxygen?",
+    "gold": "red blood cells (erythrocytes)",
+    "student_answer": "red blood cells (erythrocytes)",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-06",
+  "subject_id": "biology",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Name the molecule that carries genetic information.",
+    "gold": "DNA",
+    "student_answer": "DNA",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Which blood cells carry oxygen?",
+    "gold": "red blood cells (erythrocytes)",
+    "student_answer": "white blood cells",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "What is the basic structural and functional unit of living things?",
+    "gold": "the cell",
+    "student_answer": "the cell",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Which gas do plants take in during photosynthesis?",
+    "gold": "carbon dioxide (CO2)",
+    "student_answer": "a gas from air",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "Where does photosynthesis take place in a plant cell?",
+    "gold": "in the chloroplasts",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-07",
+  "subject_id": "biology",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which gas do plants take in during photosynthesis?",
+    "gold": "carbon dioxide (CO2)",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Where does photosynthesis take place in a plant cell?",
+    "gold": "in the chloroplasts",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "What do we call organisms that make their own food?",
+    "gold": "autotrophs (producers)",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Which part of the cell contains the DNA in humans?",
+    "gold": "the nucleus",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "What is the function of ribosomes?",
+    "gold": "protein synthesis",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-biol-08",
+  "subject_id": "biology",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which part of the cell contains the DNA in humans?",
+    "gold": "the nucleus",
+    "student_answer": "the ribosome",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "What is the function of ribosomes?",
+    "gold": "protein synthesis",
+    "student_answer": "energy storage",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Which vitamin is produced in skin under sunlight?",
+    "gold": "vitamin D",
+    "student_answer": "vitamin C",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Which organelle produces most of the cell's ATP?",
+    "gold": "mitochondria",
+    "student_answer": "nucleus",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "What is the process by which plants make glucose from light?",
+    "gold": "photosynthesis",
+    "student_answer": "respiration",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-01",
+  "subject_id": "history",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did Amir Temur die?",
+    "gold": "1405",
+    "student_answer": "1405",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "In which year did Uzbekistan declare independence?",
+    "gold": "1991 (1 September)",
+    "student_answer": "1991 (1 September)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "When was the Constitution of the Republic of Uzbekistan adopted?",
+    "gold": "8 December 1992",
+    "student_answer": "8 December 1992",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Which city was the capital of the Timurid state?",
+    "gold": "Samarkand",
+    "student_answer": "Samarkand",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Who built an observatory in Samarkand in the 15th century?",
+    "gold": "Mirzo Ulugbek",
+    "student_answer": "Mirzo Ulugbek",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-02",
+  "subject_id": "history",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which city was the capital of the Timurid state?",
+    "gold": "Samarkand",
+    "student_answer": "Samarkand",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Who built an observatory in Samarkand in the 15th century?",
+    "gold": "Mirzo Ulugbek",
+    "student_answer": "Mirzo Ulugbek",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "In which year did the Second World War end?",
+    "gold": "1945",
+    "student_answer": "1945",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did the French Revolution begin?",
+    "gold": "1789",
+    "student_answer": "1789",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Who founded the Mughal Empire in India?",
+    "gold": "Zahiriddin Muhammad Babur",
+    "student_answer": "Zahiriddin Muhammad Babur",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-03",
+  "subject_id": "history",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did the French Revolution begin?",
+    "gold": "1789",
+    "student_answer": "1789",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Who founded the Mughal Empire in India?",
+    "gold": "Zahiriddin Muhammad Babur",
+    "student_answer": "Zahiriddin Muhammad Babur",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Who is the author of the epic 'Khamsa' among Chagatai poets?",
+    "gold": "Alisher Navoi",
+    "student_answer": "a poet",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did Temur defeat the Ottoman sultan Bayezid at Ankara?",
+    "gold": "1402",
+    "student_answer": "1453",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Which famous trade route connected China with the Mediterranean?",
+    "gold": "the Great Silk Road",
+    "student_answer": "the Great Silk Road",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-04",
+  "subject_id": "history",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did Temur defeat the Ottoman sultan Bayezid at Ankara?",
+    "gold": "1402",
+    "student_answer": "1453",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Which famous trade route connected China with the Mediterranean?",
+    "gold": "the Great Silk Road",
+    "student_answer": "a trade route",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "In which year was the Battle of Panipat that opened the Mughal era?",
+    "gold": "1526",
+    "student_answer": "1206",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did Amir Temur die?",
+    "gold": "1405",
+    "student_answer": "1405",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "In which year did Uzbekistan declare independence?",
+    "gold": "1991 (1 September)",
+    "student_answer": "1985",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-05",
+  "subject_id": "history",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did Amir Temur die?",
+    "gold": "1405",
+    "student_answer": "1405",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "In which year did Uzbekistan declare independence?",
+    "gold": "1991 (1 September)",
+    "student_answer": "1991 (1 September)",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "When was the Constitution of the Republic of Uzbekistan adopted?",
+    "gold": "8 December 1992",
+    "student_answer": "8 December 1992",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "Which city was the capital of the Timurid state?",
+    "gold": "Samarkand",
+    "student_answer": "Samarkand",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "Who built an observatory in Samarkand in the 15th century?",
+    "gold": "Mirzo Ulugbek",
+    "student_answer": "Mirzo Ulugbek",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-06",
+  "subject_id": "history",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Which city was the capital of the Timurid state?",
+    "gold": "Samarkand",
+    "student_answer": "Samarkand",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Who built an observatory in Samarkand in the 15th century?",
+    "gold": "Mirzo Ulugbek",
+    "student_answer": "Alisher Navoi",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "In which year did the Second World War end?",
+    "gold": "1945",
+    "student_answer": "1945",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did the French Revolution begin?",
+    "gold": "1789",
+    "student_answer": "at the end of the 18th century",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "Who founded the Mughal Empire in India?",
+    "gold": "Zahiriddin Muhammad Babur",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-07",
+  "subject_id": "history",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did the French Revolution begin?",
+    "gold": "1789",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Who founded the Mughal Empire in India?",
+    "gold": "Zahiriddin Muhammad Babur",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Who is the author of the epic 'Khamsa' among Chagatai poets?",
+    "gold": "Alisher Navoi",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did Temur defeat the Ottoman sultan Bayezid at Ankara?",
+    "gold": "1402",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Which famous trade route connected China with the Mediterranean?",
+    "gold": "the Great Silk Road",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-hist-08",
+  "subject_id": "history",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "In which year did Temur defeat the Ottoman sultan Bayezid at Ankara?",
+    "gold": "1402",
+    "student_answer": "1453",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Which famous trade route connected China with the Mediterranean?",
+    "gold": "the Great Silk Road",
+    "student_answer": "the Amber Road",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "In which year was the Battle of Panipat that opened the Mughal era?",
+    "gold": "1526",
+    "student_answer": "1206",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "In which year did Amir Temur die?",
+    "gold": "1405",
+    "student_answer": "1250",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "In which year did Uzbekistan declare independence?",
+    "gold": "1991 (1 September)",
+    "student_answer": "1985",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-01",
+  "subject_id": "english",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Fill in: She ___ to school every day. (go)",
+    "gold": "goes",
+    "student_answer": "goes",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Past simple of 'buy':",
+    "gold": "bought",
+    "student_answer": "bought",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Plural of 'child':",
+    "gold": "children",
+    "student_answer": "children",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Comparative form of 'good':",
+    "gold": "better",
+    "student_answer": "better",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Fill in: If I ___ rich, I would travel the world.",
+    "gold": "were",
+    "student_answer": "were",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-02",
+  "subject_id": "english",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Comparative form of 'good':",
+    "gold": "better",
+    "student_answer": "better",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Fill in: If I ___ rich, I would travel the world.",
+    "gold": "were",
+    "student_answer": "were",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Fill in: They have ___ their homework already. (finish)",
+    "gold": "finished",
+    "student_answer": "finished",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Choose the correct article: ___ apple a day keeps the doctor away.",
+    "gold": "An",
+    "student_answer": "An",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Fill in: He is taller ___ his brother.",
+    "gold": "than",
+    "student_answer": "than",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-03",
+  "subject_id": "english",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Choose the correct article: ___ apple a day keeps the doctor away.",
+    "gold": "An",
+    "student_answer": "An",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Fill in: He is taller ___ his brother.",
+    "gold": "than",
+    "student_answer": "than",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Past participle of 'write':",
+    "gold": "written",
+    "student_answer": "writed",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "Fill in: There ___ two books on the table.",
+    "gold": "are",
+    "student_answer": "is",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Opposite of 'ancient':",
+    "gold": "modern",
+    "student_answer": "modern",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-04",
+  "subject_id": "english",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Fill in: There ___ two books on the table.",
+    "gold": "are",
+    "student_answer": "is",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Opposite of 'ancient':",
+    "gold": "modern",
+    "student_answer": "new maybe",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "Fill in: I ___ watching TV when you called. (be, past continuous)",
+    "gold": "was",
+    "student_answer": "were",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Fill in: She ___ to school every day. (go)",
+    "gold": "goes",
+    "student_answer": "goes",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Past simple of 'buy':",
+    "gold": "bought",
+    "student_answer": "buyed",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-05",
+  "subject_id": "english",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Fill in: She ___ to school every day. (go)",
+    "gold": "goes",
+    "student_answer": "goes",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "Past simple of 'buy':",
+    "gold": "bought",
+    "student_answer": "bought",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "Plural of 'child':",
+    "gold": "children",
+    "student_answer": "children",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "Comparative form of 'good':",
+    "gold": "better",
+    "student_answer": "better",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "Fill in: If I ___ rich, I would travel the world.",
+    "gold": "were",
+    "student_answer": "were",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-06",
+  "subject_id": "english",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Comparative form of 'good':",
+    "gold": "better",
+    "student_answer": "better",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Fill in: If I ___ rich, I would travel the world.",
+    "gold": "were",
+    "student_answer": "am",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Fill in: They have ___ their homework already. (finish)",
+    "gold": "finished",
+    "student_answer": "finished",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Choose the correct article: ___ apple a day keeps the doctor away.",
+    "gold": "An",
+    "student_answer": "The",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "Fill in: He is taller ___ his brother.",
+    "gold": "than",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-07",
+  "subject_id": "english",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Choose the correct article: ___ apple a day keeps the doctor away.",
+    "gold": "An",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Fill in: He is taller ___ his brother.",
+    "gold": "than",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Past participle of 'write':",
+    "gold": "written",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Fill in: There ___ two books on the table.",
+    "gold": "are",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Opposite of 'ancient':",
+    "gold": "modern",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-engl-08",
+  "subject_id": "english",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Fill in: There ___ two books on the table.",
+    "gold": "are",
+    "student_answer": "is",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Opposite of 'ancient':",
+    "gold": "modern",
+    "student_answer": "old",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Fill in: I ___ watching TV when you called. (be, past continuous)",
+    "gold": "was",
+    "student_answer": "were",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Fill in: She ___ to school every day. (go)",
+    "gold": "goes",
+    "student_answer": "go",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Past simple of 'buy':",
+    "gold": "bought",
+    "student_answer": "buyed",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-01",
+  "subject_id": "russian",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Инфинитив глагола «иду»:",
+    "gold": "идти",
+    "student_answer": "идти",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Поставьте существительное «город» во множественное число:",
+    "gold": "города",
+    "student_answer": "города",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Антоним к слову «большой»:",
+    "gold": "маленький",
+    "student_answer": "маленький",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Прошедшее время женского рода от «читать»:",
+    "gold": "читала",
+    "student_answer": "читала",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Родительный падеж слова «книга»:",
+    "gold": "книги",
+    "student_answer": "книги",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-02",
+  "subject_id": "russian",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Прошедшее время женского рода от «читать»:",
+    "gold": "читала",
+    "student_answer": "читала",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Родительный падеж слова «книга»:",
+    "gold": "книги",
+    "student_answer": "книги",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Винительный падеж слова «мама»:",
+    "gold": "маму",
+    "student_answer": "маму",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Сколько гласных в слове «окно»?",
+    "gold": "две (о, о)",
+    "student_answer": "две (о, о)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Множественное число слова «стол»:",
+    "gold": "столы",
+    "student_answer": "столы",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-03",
+  "subject_id": "russian",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Сколько гласных в слове «окно»?",
+    "gold": "две (о, о)",
+    "student_answer": "две (о, о)",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Множественное число слова «стол»:",
+    "gold": "столы",
+    "student_answer": "столы",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "Какой частью речи является слово «быстро»?",
+    "gold": "наречие",
+    "student_answer": "глагол",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "Образуйте от «писать» форму 3 лица ед. числа настоящего времени:",
+    "gold": "пишет",
+    "student_answer": "писал",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Синоним к слову «друг»:",
+    "gold": "товарищ",
+    "student_answer": "товарищ",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-04",
+  "subject_id": "russian",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Образуйте от «писать» форму 3 лица ед. числа настоящего времени:",
+    "gold": "пишет",
+    "student_answer": "писал",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Синоним к слову «друг»:",
+    "gold": "товарищ",
+    "student_answer": "сосед",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "Укажите ударный слог в слове «магазин»:",
+    "gold": "последний (-зин)",
+    "student_answer": "первый",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Инфинитив глагола «иду»:",
+    "gold": "идти",
+    "student_answer": "идти",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Поставьте существительное «город» во множественное число:",
+    "gold": "города",
+    "student_answer": "городы",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-05",
+  "subject_id": "russian",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Инфинитив глагола «иду»:",
+    "gold": "идти",
+    "student_answer": "идти",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "Поставьте существительное «город» во множественное число:",
+    "gold": "города",
+    "student_answer": "города",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "Антоним к слову «большой»:",
+    "gold": "маленький",
+    "student_answer": "маленький",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "Прошедшее время женского рода от «читать»:",
+    "gold": "читала",
+    "student_answer": "читала",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "Родительный падеж слова «книга»:",
+    "gold": "книги",
+    "student_answer": "книги",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-06",
+  "subject_id": "russian",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Прошедшее время женского рода от «читать»:",
+    "gold": "читала",
+    "student_answer": "читала",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Родительный падеж слова «книга»:",
+    "gold": "книги",
+    "student_answer": "книгу",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Винительный падеж слова «мама»:",
+    "gold": "маму",
+    "student_answer": "маму",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "Сколько гласных в слове «окно»?",
+    "gold": "две (о, о)",
+    "student_answer": "одна",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "Множественное число слова «стол»:",
+    "gold": "столы",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-07",
+  "subject_id": "russian",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Сколько гласных в слове «окно»?",
+    "gold": "две (о, о)",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Множественное число слова «стол»:",
+    "gold": "столы",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Какой частью речи является слово «быстро»?",
+    "gold": "наречие",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Образуйте от «писать» форму 3 лица ед. числа настоящего времени:",
+    "gold": "пишет",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Синоним к слову «друг»:",
+    "gold": "товарищ",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-russ-08",
+  "subject_id": "russian",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "Образуйте от «писать» форму 3 лица ед. числа настоящего времени:",
+    "gold": "пишет",
+    "student_answer": "писал",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Синоним к слову «друг»:",
+    "gold": "товарищ",
+    "student_answer": "враг",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "Укажите ударный слог в слове «магазин»:",
+    "gold": "последний (-зин)",
+    "student_answer": "первый",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "Инфинитив глагола «иду»:",
+    "gold": "идти",
+    "student_answer": "идут",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Поставьте существительное «город» во множественное число:",
+    "gold": "города",
+    "student_answer": "городы",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-01",
+  "subject_id": "uzbek",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«kitob» so'zining ko'plik shaklini yozing:",
+    "gold": "kitoblar",
+    "student_answer": "kitoblar",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "«maktab» so'ziga jo'nalish kelishigi qo'shimchasini qo'shing:",
+    "gold": "maktabga",
+    "student_answer": "maktabga",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«katta» so'zining antonimini yozing:",
+    "gold": "kichik",
+    "student_answer": "kichik",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«men» olmoshi bilan «kitob» so'zini egalik shaklida yozing:",
+    "gold": "kitobim",
+    "student_answer": "kitobim",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "O'zbekistonning poytaxti qaysi shahar?",
+    "gold": "Toshkent",
+    "student_answer": "Toshkent",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-02",
+  "subject_id": "uzbek",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«men» olmoshi bilan «kitob» so'zini egalik shaklida yozing:",
+    "gold": "kitobim",
+    "student_answer": "kitobim",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "O'zbekistonning poytaxti qaysi shahar?",
+    "gold": "Toshkent",
+    "student_answer": "Toshkent",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«uy» so'ziga o'rin-payt kelishigi qo'shimchasini qo'shing:",
+    "gold": "uyda",
+    "student_answer": "uyda",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«bolalar» so'zining birlik shaklini yozing:",
+    "gold": "bola",
+    "student_answer": "bola",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "«yaxshi» so'zining antonimini yozing:",
+    "gold": "yomon",
+    "student_answer": "yomon",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-03",
+  "subject_id": "uzbek",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«bolalar» so'zining birlik shaklini yozing:",
+    "gold": "bola",
+    "student_answer": "bola",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "«yaxshi» so'zining antonimini yozing:",
+    "gold": "yomon",
+    "student_answer": "yomon",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«o'qimoq» fe'lining hozirgi zamon 1-shaxs birlik shaklini yozing:",
+    "gold": "o'qiyman",
+    "student_answer": "o'qiydi",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "«daryo» so'ziga chiqish kelishigi qo'shimchasini qo'shing:",
+    "gold": "daryodan",
+    "student_answer": "daryoga",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Gapda nechta so'z bor: «Men maktabga boraman»?",
+    "gold": "3",
+    "student_answer": "3",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-04",
+  "subject_id": "uzbek",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«daryo» so'ziga chiqish kelishigi qo'shimchasini qo'shing:",
+    "gold": "daryodan",
+    "student_answer": "daryoga",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Gapda nechta so'z bor: «Men maktabga boraman»?",
+    "gold": "3",
+    "student_answer": "4",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "«olma» so'ziga tushum kelishigi qo'shimchasini qo'shing:",
+    "gold": "olmani",
+    "student_answer": "olmaga",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«kitob» so'zining ko'plik shaklini yozing:",
+    "gold": "kitoblar",
+    "student_answer": "kitoblar",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "«maktab» so'ziga jo'nalish kelishigi qo'shimchasini qo'shing:",
+    "gold": "maktabga",
+    "student_answer": "maktabda",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-05",
+  "subject_id": "uzbek",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«kitob» so'zining ko'plik shaklini yozing:",
+    "gold": "kitoblar",
+    "student_answer": "kitoblar",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "«maktab» so'ziga jo'nalish kelishigi qo'shimchasini qo'shing:",
+    "gold": "maktabga",
+    "student_answer": "maktabga",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "«katta» so'zining antonimini yozing:",
+    "gold": "kichik",
+    "student_answer": "kichik",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "«men» olmoshi bilan «kitob» so'zini egalik shaklida yozing:",
+    "gold": "kitobim",
+    "student_answer": "kitobim",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "O'zbekistonning poytaxti qaysi shahar?",
+    "gold": "Toshkent",
+    "student_answer": "Toshkent",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-06",
+  "subject_id": "uzbek",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«men» olmoshi bilan «kitob» so'zini egalik shaklida yozing:",
+    "gold": "kitobim",
+    "student_answer": "kitobim",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "O'zbekistonning poytaxti qaysi shahar?",
+    "gold": "Toshkent",
+    "student_answer": "Samarqand",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«uy» so'ziga o'rin-payt kelishigi qo'shimchasini qo'shing:",
+    "gold": "uyda",
+    "student_answer": "uyda",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«bolalar» so'zining birlik shaklini yozing:",
+    "gold": "bola",
+    "student_answer": "bolaga",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "«yaxshi» so'zining antonimini yozing:",
+    "gold": "yomon",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-07",
+  "subject_id": "uzbek",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«bolalar» so'zining birlik shaklini yozing:",
+    "gold": "bola",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "«yaxshi» so'zining antonimini yozing:",
+    "gold": "yomon",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«o'qimoq» fe'lining hozirgi zamon 1-shaxs birlik shaklini yozing:",
+    "gold": "o'qiyman",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«daryo» so'ziga chiqish kelishigi qo'shimchasini qo'shing:",
+    "gold": "daryodan",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "Gapda nechta so'z bor: «Men maktabga boraman»?",
+    "gold": "3",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-uzbe-08",
+  "subject_id": "uzbek",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«daryo» so'ziga chiqish kelishigi qo'shimchasini qo'shing:",
+    "gold": "daryodan",
+    "student_answer": "daryoga",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "Gapda nechta so'z bor: «Men maktabga boraman»?",
+    "gold": "3",
+    "student_answer": "2",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«olma» so'ziga tushum kelishigi qo'shimchasini qo'shing:",
+    "gold": "olmani",
+    "student_answer": "olmaga",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«kitob» so'zining ko'plik shaklini yozing:",
+    "gold": "kitoblar",
+    "student_answer": "kitobi",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "«maktab» so'ziga jo'nalish kelishigi qo'shimchasini qo'shing:",
+    "gold": "maktabga",
+    "student_answer": "maktabda",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-01",
+  "subject_id": "turkish",
+  "profile": "strong",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«kitap» kelimesinin çoğul hâlini yazın:",
+    "gold": "kitaplar",
+    "student_answer": "kitaplar",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "«ev» kelimesine bulunma (-de) hâli ekini ekleyin:",
+    "gold": "evde",
+    "student_answer": "evde",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«büyük» kelimesinin zıt anlamlısı:",
+    "gold": "küçük",
+    "student_answer": "küçük",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«okul» kelimesine yönelme (-e) hâli ekini ekleyin:",
+    "gold": "okula",
+    "student_answer": "okula",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "Türkiye'nin başkenti neresidir?",
+    "gold": "Ankara",
+    "student_answer": "Ankara",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-02",
+  "subject_id": "turkish",
+  "profile": "strong_slip",
+  "expected_score": 100,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«okul» kelimesine yönelme (-e) hâli ekini ekleyin:",
+    "gold": "okula",
+    "student_answer": "okula",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Türkiye'nin başkenti neresidir?",
+    "gold": "Ankara",
+    "student_answer": "Ankara",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«ben» için «gelmek» fiilini şimdiki zamanda çekimleyin:",
+    "gold": "geliyorum",
+    "student_answer": "geliyorum",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«göz» kelimesinin çoğul hâlini yazın:",
+    "gold": "gözler",
+    "student_answer": "gözler",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "«ben» için «kitap» kelimesinin iyelik hâli:",
+    "gold": "kitabım",
+    "student_answer": "kitabım",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-03",
+  "subject_id": "turkish",
+  "profile": "average",
+  "expected_score": 70,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«göz» kelimesinin çoğul hâlini yazın:",
+    "gold": "gözler",
+    "student_answer": "gözler",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "«ben» için «kitap» kelimesinin iyelik hâli:",
+    "gold": "kitabım",
+    "student_answer": "kitabım",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 3,
+    "prompt": "«gitmek» fiilinin geçmiş zaman, 3. tekil kişi hâli:",
+    "gold": "gitti",
+    "student_answer": "gidecek",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 4,
+    "prompt": "«hızlı» kelimesinin zıt anlamlısı:",
+    "gold": "yavaş",
+    "student_answer": "güzel",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "«masa» kelimesine belirtme (-ı/-i) hâli ekini ekleyin:",
+    "gold": "masayı",
+    "student_answer": "masayı",
+    "outcome": "correct",
+    "score": 100
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-04",
+  "subject_id": "turkish",
+  "profile": "weak",
+  "expected_score": 30,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«hızlı» kelimesinin zıt anlamlısı:",
+    "gold": "yavaş",
+    "student_answer": "güzel",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "«masa» kelimesine belirtme (-ı/-i) hâli ekini ekleyin:",
+    "gold": "masayı",
+    "student_answer": "masada",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 3,
+    "prompt": "«ev» kelimesine ayrılma (-den) hâli ekini ekleyin:",
+    "gold": "evden",
+    "student_answer": "evde",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«kitap» kelimesinin çoğul hâlini yazın:",
+    "gold": "kitaplar",
+    "student_answer": "kitaplar",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 5,
+    "prompt": "«ev» kelimesine bulunma (-de) hâli ekini ekleyin:",
+    "gold": "evde",
+    "student_answer": "eve",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-05",
+  "subject_id": "turkish",
+  "profile": "answers_only",
+  "expected_score": 90,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«kitap» kelimesinin çoğul hâlini yazın:",
+    "gold": "kitaplar",
+    "student_answer": "kitaplar",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 2,
+    "prompt": "«ev» kelimesine bulunma (-de) hâli ekini ekleyin:",
+    "gold": "evde",
+    "student_answer": "evde",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 3,
+    "prompt": "«büyük» kelimesinin zıt anlamlısı:",
+    "gold": "küçük",
+    "student_answer": "küçük",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 4,
+    "prompt": "«okul» kelimesine yönelme (-e) hâli ekini ekleyin:",
+    "gold": "okula",
+    "student_answer": "okula",
+    "outcome": "no_working",
+    "score": 90
+   },
+   {
+    "q": 5,
+    "prompt": "Türkiye'nin başkenti neresidir?",
+    "gold": "Ankara",
+    "student_answer": "Ankara",
+    "outcome": "no_working",
+    "score": 90
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-06",
+  "subject_id": "turkish",
+  "profile": "careless",
+  "expected_score": 50,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«okul» kelimesine yönelme (-e) hâli ekini ekleyin:",
+    "gold": "okula",
+    "student_answer": "okula",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 2,
+    "prompt": "Türkiye'nin başkenti neresidir?",
+    "gold": "Ankara",
+    "student_answer": "İstanbul",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«ben» için «gelmek» fiilini şimdiki zamanda çekimleyin:",
+    "gold": "geliyorum",
+    "student_answer": "geliyorum",
+    "outcome": "correct",
+    "score": 100
+   },
+   {
+    "q": 4,
+    "prompt": "«göz» kelimesinin çoğul hâlini yazın:",
+    "gold": "gözler",
+    "student_answer": "gözü",
+    "outcome": "partial",
+    "score": 50
+   },
+   {
+    "q": 5,
+    "prompt": "«ben» için «kitap» kelimesinin iyelik hâli:",
+    "gold": "kitabım",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-07",
+  "subject_id": "turkish",
+  "profile": "blank",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«göz» kelimesinin çoğul hâlini yazın:",
+    "gold": "gözler",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "«ben» için «kitap» kelimesinin iyelik hâli:",
+    "gold": "kitabım",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«gitmek» fiilinin geçmiş zaman, 3. tekil kişi hâli:",
+    "gold": "gitti",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«hızlı» kelimesinin zıt anlamlısı:",
+    "gold": "yavaş",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "«masa» kelimesine belirtme (-ı/-i) hâli ekini ekleyin:",
+    "gold": "masayı",
+    "student_answer": "",
+    "outcome": "blank",
+    "score": 0
+   }
+  ]
+ },
+ {
+  "id": "syn-turk-08",
+  "subject_id": "turkish",
+  "profile": "all_wrong",
+  "expected_score": 0,
+  "questions": [
+   {
+    "q": 1,
+    "prompt": "«hızlı» kelimesinin zıt anlamlısı:",
+    "gold": "yavaş",
+    "student_answer": "güzel",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 2,
+    "prompt": "«masa» kelimesine belirtme (-ı/-i) hâli ekini ekleyin:",
+    "gold": "masayı",
+    "student_answer": "masaya",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 3,
+    "prompt": "«ev» kelimesine ayrılma (-den) hâli ekini ekleyin:",
+    "gold": "evden",
+    "student_answer": "evde",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 4,
+    "prompt": "«kitap» kelimesinin çoğul hâlini yazın:",
+    "gold": "kitaplar",
+    "student_answer": "kitapler",
+    "outcome": "wrong",
+    "score": 0
+   },
+   {
+    "q": 5,
+    "prompt": "«ev» kelimesine bulunma (-de) hâli ekini ekleyin:",
+    "gold": "evde",
+    "student_answer": "eve",
+    "outcome": "wrong",
+    "score": 0
+   }
+  ]
+ }
+]

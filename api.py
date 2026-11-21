@@ -31,15 +31,17 @@ Example (language skill, Speaking):
 from datetime import datetime
 import hmac
 import logging
+from pathlib import Path
 from typing import List, Optional
 import uuid
 
 from fastapi import Body, FastAPI, File, Form, Header, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 
 from batch_processor import BatchProcessorError, BatchSubmission, poll_batch, submit_batch
 import config
+import hardening
 from config import DEFAULT_MODEL, INTERNAL_API_KEY, MODEL_BACKEND, COLLECT_TRAINING_DATA
 from homework_checker import get_checker, HomeworkCheckerError
 from prompts import (
@@ -68,6 +70,8 @@ import token_usage_logger
 import jobs
 import db
 import reconcile
+import retention
+import utils
 import webhook_security
 from review_validation import ReviewResultError, validate_review_result
 
@@ -83,6 +87,13 @@ app = FastAPI(
     ),
     version="1.0.0",
 )
+
+if config.IS_PRODUCTION:
+    _problems = config.production_config_problems()
+    if _problems:
+        raise RuntimeError(
+            "Refusing to start with APP_ENV=production and an unsafe configuration:\n  - " + "\n  - ".join(_problems)
+        )
 
 # CORS is OFF unless CORS_ALLOW_ORIGINS lists the browser origins that may call this API
 # (server-to-server callers -- a CRM backend, the Streamlit app -- do not need it).
@@ -109,6 +120,32 @@ def _save_upload_or_400(file_bytes: bytes, filename: str):
         return save_uploaded_file(file_bytes, filename)
     except UnsupportedFileError as exc:
         raise HTTPException(status_code=400, detail=f"{filename}: {exc}")
+
+
+def _read_upload_or_413(upload) -> bytes:
+    """The upload's bytes, read with a hard size cap (HTTP 413 as soon as it is exceeded)."""
+    try:
+        return hardening.read_upload_capped(upload)
+    except hardening.RequestTooLarge as exc:
+        raise HTTPException(status_code=413, detail=str(exc))
+
+
+def _check_fields_or_422(**fields) -> None:
+    try:
+        hardening.check_field_lengths(**fields)
+    except hardening.FieldTooLong as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+def _check_org_rate_or_429(organization_id: str) -> None:
+    try:
+        hardening.check_org_rate(organization_id)
+    except hardening.RateLimitExceeded as exc:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Too many submissions ({exc.scope} limit of {exc.limit}). Retry after {exc.retry_after} seconds.",
+            headers={"Retry-After": str(exc.retry_after)},
+        )
 
 
 def _check_internal_key(x_internal_api_key: Optional[str]) -> None:
@@ -260,7 +297,7 @@ def analyze_homework(
     """
     _check_internal_key(x_internal_api_key)
 
-    file_bytes = file.file.read()
+    file_bytes = _read_upload_or_413(file)
     try:
         validate_upload(file.filename, len(file_bytes))
     except (UnsupportedFileError, FileTooLargeError) as exc:
@@ -341,7 +378,7 @@ def submit_job(
                    "Use /analyze if you need to send your own key per request.",
         )
 
-    file_bytes = file.file.read()
+    file_bytes = _read_upload_or_413(file)
     try:
         validate_upload(file.filename, len(file_bytes))
     except (UnsupportedFileError, FileTooLargeError) as exc:
@@ -517,7 +554,7 @@ def submit_batch_job(
     items = []
     id_to_label = {}
     for i, f in enumerate(files):
-        file_bytes = f.file.read()
+        file_bytes = _read_upload_or_413(f)
         try:
             validate_upload(f.filename, len(file_bytes))
         except (UnsupportedFileError, FileTooLargeError) as exc:
@@ -644,6 +681,24 @@ def admin_reconcile(x_internal_api_key: Optional[str] = Header(None)):
         raise HTTPException(status_code=503, detail=f"Reconciliation failed: {type(exc).__name__}")
 
 
+@app.post("/admin/retention")
+def admin_retention(x_internal_api_key: Optional[str] = Header(None)):
+    """Runs one pass of retention.py (deletes old approved files and orphan uploads). Call it daily."""
+    _check_internal_key(x_internal_api_key)
+    try:
+        return retention.purge_once()
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"Retention pass failed: {type(exc).__name__}")
+
+
+@app.get("/metrics")
+def metrics(x_internal_api_key: Optional[str] = Header(None)):
+    """Prometheus text metrics (queue lengths, submissions by status, oldest waiting job, AI spend)."""
+    _check_internal_key(x_internal_api_key)
+    import metrics as metrics_module
+    return Response(content=metrics_module.render(), media_type="text/plain; version=0.0.4; charset=utf-8")
+
+
 MAX_ASSIGNMENT_TEXT_CHARS = 20000   # task text / answer key; keeps the shared prompt prefix bounded
 
 
@@ -674,7 +729,16 @@ def submit_for_review(
     """
     org = _authenticate_organization(x_organization_api_key)
 
-    file_bytes = file.file.read()
+    _check_fields_or_422(
+        teacher_external_id=teacher_external_id, teacher_name=teacher_name,
+        student_external_id=student_external_id, student_name=student_name,
+        external_assignment_id=external_assignment_id, external_submission_id=external_submission_id,
+        model_name=model_name, subject_key=subject_key, custom_subject_name=custom_subject_name,
+        language_key=language_key, skill_key=skill_key, extra_instructions=extra_instructions,
+    )
+    _check_org_rate_or_429(org["id"])
+
+    file_bytes = _read_upload_or_413(file)
     try:
         validate_upload(file.filename, len(file_bytes))
     except (UnsupportedFileError, FileTooLargeError) as exc:
@@ -691,7 +755,10 @@ def submit_for_review(
     if (task_text or answer_key) and not external_assignment_id:
         raise HTTPException(status_code=400, detail="external_assignment_id is required when task_text or answer_key is sent.")
 
-    saved_path = _save_upload_or_400(file_bytes, file.filename)
+    # A client retry of an existing submission must not write a second copy of the file to disk
+    # (nothing would ever refer to it): save the file only for a submission that is new.
+    already_there = bool(external_submission_id) and db.submission_exists(org["id"], external_submission_id)
+    saved_path = "" if already_there else _save_upload_or_400(file_bytes, file.filename)
 
     assignment_id = (
         db.get_or_create_assignment(org["id"], external_assignment_id, task_text or None, answer_key or None)
@@ -713,7 +780,7 @@ def submit_for_review(
         model_name=model_name or "",
         backend=MODEL_BACKEND,
         extra_instructions=extra_instructions,
-        input_file_path=str(saved_path),
+        input_file_path=str(saved_path) if saved_path else "",
     )
 
     existing = db.get_submission(submission_id, organization_id=org["id"])
@@ -792,6 +859,7 @@ def review_submission(
     action: str = Body(..., description="'approve' (accept the AI result as-is) or 'edit' (save corrected_result and approve)."),
     corrected_result: Optional[dict] = Body(None, description="Required when action='edit': the corrected grading JSON, same schema as the AI's result (overall_score 0-100 and a questions list)."),
     reviewer_note: Optional[str] = Body(None),
+    reviewer_external_id: Optional[str] = Body(None, description="Your CRM's id of the teacher making this decision (kept in the audit trail)."),
     x_organization_api_key: Optional[str] = Header(None),
 ):
     """
@@ -802,6 +870,7 @@ def review_submission(
     COLLECT_TRAINING_DATA is enabled, logs the approved result as a verified "gold" example.
     """
     org = _authenticate_organization(x_organization_api_key)
+    _check_fields_or_422(reviewer_note=reviewer_note, reviewer_external_id=reviewer_external_id)
 
     if action not in ("approve", "edit"):
         raise HTTPException(status_code=400, detail="action must be 'approve' or 'edit'.")
@@ -828,6 +897,7 @@ def review_submission(
             organization_id=org["id"],
             corrected_result=corrected_result if action == "edit" else None,
             reviewer_note=reviewer_note,
+            reviewer_external_id=reviewer_external_id,
         )
     except db.InvalidTransition as exc:
         # Lost a race against another approval (the check above is only a fast path).
@@ -874,6 +944,35 @@ def review_submission(
     return updated
 
 
+@app.delete("/submissions/{submission_id}")
+def erase_submission(
+    submission_id: str,
+    reviewer_external_id: Optional[str] = Query(None, description="Your CRM's id of whoever asked for the erasure (audit trail)."),
+    x_organization_api_key: Optional[str] = Header(None),
+):
+    """
+    Erases a submission and the student's file (a deletion request from a school or a parent). The
+    row, the stored file and the webhook log are removed; an anonymous audit event stays. Refused
+    (409) while the AI is still grading it. The grade in YOUR gradebook is not touched.
+    """
+    org = _authenticate_organization(x_organization_api_key)
+    _check_fields_or_422(reviewer_external_id=reviewer_external_id)
+    try:
+        path = db.delete_submission(submission_id, organization_id=org["id"], actor=reviewer_external_id)
+    except db.InvalidTransition:
+        raise HTTPException(status_code=409, detail="The submission is still being graded; erase it once grading finished.")
+    if path is None:
+        raise HTTPException(status_code=404, detail="Submission not found.")
+    if path:
+        try:
+            p = Path(path)
+            if retention._inside(p, Path(utils.UPLOAD_DIR)):
+                p.unlink(missing_ok=True)
+        except OSError:
+            logger.exception("could not delete the file of erased submission %s", submission_id)
+    return {"erased": True, "submission_id": submission_id}
+
+
 @app.post("/submissions/{submission_id}/regrade")
 def regrade_submission(submission_id: str, x_organization_api_key: Optional[str] = Header(None)):
     """
@@ -884,6 +983,11 @@ def regrade_submission(submission_id: str, x_organization_api_key: Optional[str]
     org = _authenticate_organization(x_organization_api_key)
     try:
         updated = db.reset_for_regrade(submission_id, organization_id=org["id"])
+    except db.RegradeLimitReached as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=f"This submission was already regraded {exc.limit} times (the limit); ask an administrator.",
+        )
     except db.InvalidTransition as exc:
         raise HTTPException(
             status_code=409,

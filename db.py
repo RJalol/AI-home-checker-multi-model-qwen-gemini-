@@ -17,6 +17,7 @@ Run once before first use:
 
 import enum
 import hashlib
+import logging
 import secrets
 import uuid
 from contextlib import contextmanager
@@ -38,7 +39,10 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, relationship, sessionmaker
 
-from config import DATABASE_URL
+from config import DATABASE_URL, MAX_REGRADES_PER_SUBMISSION
+
+
+logger = logging.getLogger(__name__)
 
 
 class Base(DeclarativeBase):
@@ -68,6 +72,15 @@ def _is_uuid(value) -> bool:
         return True
     except (ValueError, AttributeError, TypeError):
         return False
+
+
+class RegradeLimitReached(Exception):
+    """A submission was already sent back for grading MAX_REGRADES_PER_SUBMISSION times."""
+
+    def __init__(self, submission_id: str, limit: int):
+        super().__init__(f"submission {submission_id} already regraded {limit} times")
+        self.submission_id = submission_id
+        self.limit = limit
 
 
 class InvalidTransition(Exception):
@@ -177,6 +190,9 @@ class Submission(Base):
     output_tokens = Column(Integer, default=0)
     cached_tokens = Column(Integer, default=0)
 
+    # How many times this submission was sent back for grading (capped, see MAX_REGRADES_PER_SUBMISSION).
+    regrade_count = Column(Integer, nullable=False, default=0, server_default="0")
+
     webhook_delivered = Column(Boolean, default=False)
     webhook_attempts = Column(Integer, default=0)
     last_webhook_error = Column(Text, nullable=True)
@@ -241,6 +257,43 @@ class Submission(Base):
             return {"task_text": a.task_text or "", "answer_key": a.answer_key or ""}
 
 
+class ReviewEvent(Base):
+    """Append-only audit trail of what happened to a submission after the AI graded it: who approved
+    or edited it, with which score before/after, and regrade / erase requests. The submission row
+    only keeps the latest state; this keeps the history."""
+
+    __tablename__ = "review_events"
+
+    id = Column(UUID(as_uuid=False), primary_key=True, default=_uuid)
+    # No foreign key on purpose: the trail must outlive an erased submission (it holds no student data).
+    submission_id = Column(UUID(as_uuid=False), nullable=False, index=True)
+    organization_id = Column(UUID(as_uuid=False), nullable=False, index=True)
+    event = Column(String(32), nullable=False)          # approved | edited | regrade_requested | erased
+    actor = Column(String(255), nullable=True)           # the CRM's id of the reviewer, if it sent one
+    score_before = Column(Integer, nullable=True)
+    score_after = Column(Integer, nullable=True)
+    note = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=_now)
+
+
+def _overall_score(result: Optional[dict]) -> Optional[int]:
+    """overall_score of a grading result as an int, or None."""
+    try:
+        value = (result or {}).get("overall_score")
+        return None if value is None or isinstance(value, bool) else int(round(float(value)))
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
+def _add_event(db, submission_id: str, organization_id: str, event: str, actor=None,
+               score_before=None, score_after=None, note=None) -> None:
+    db.add(ReviewEvent(
+        submission_id=submission_id, organization_id=organization_id, event=event,
+        actor=(actor or None) and str(actor)[:255], score_before=score_before, score_after=score_after,
+        note=(note or None) and str(note)[:2000],
+    ))
+
+
 class WebhookDelivery(Base):
     """Audit trail of webhook delivery attempts, for debugging a CRM
     integration that isn't receiving approved results."""
@@ -291,19 +344,12 @@ def session_scope():
 
 
 def init_db():
-    """Creates all tables if they don't already exist. Safe to call repeatedly.
-    For production schema *changes* over time, use Alembic migrations instead
-    of relying on this (see README)."""
+    """Creates missing tables, then applies the versioned schema migrations (migrations.py) that
+    bring an OLDER database up to the current columns. Safe to call repeatedly."""
     engine = get_engine()
     Base.metadata.create_all(engine)
-    # create_all never alters an existing table: add the one new column an older database lacks.
-    if engine.dialect.name == "postgresql":
-        from sqlalchemy import text
-        with engine.begin() as conn:
-            conn.execute(text(
-                "ALTER TABLE submissions ADD COLUMN IF NOT EXISTS assignment_id UUID REFERENCES assignments(id)"))
-            conn.execute(text(
-                "CREATE INDEX IF NOT EXISTS ix_submissions_assignment_id ON submissions (assignment_id)"))
+    import migrations
+    migrations.apply_migrations(engine)
 
 
 # ---------------------------------------------------------------------------
@@ -497,19 +543,36 @@ def mark_submission_graded(
         return True
 
 
-def mark_submission_failed(submission_id: str, error: str) -> bool:
+def _error_kind(error: str) -> str:
+    """A short, safe description of an error string (never the raw text): a timeout, the exception
+    class if the text names one, otherwise a generic label."""
+    text_lower = (error or "").lower()
+    if "timeout" in text_lower or "timed out" in text_lower or "deadline" in text_lower:
+        return "timeout"
+    head = (error or "").split(":", 1)[0].strip()
+    return head if head.isidentifier() and len(head) <= 64 else "AI provider error"
+
+
+def mark_submission_failed(submission_id: str, error: str, safe_message: Optional[str] = None) -> bool:
     """Marks a still-pending_ai submission as grading_failed. Ignored (False) if it has
-    meanwhile been graded, reviewed or approved by another job."""
+    meanwhile been graded, reviewed or approved by another job. `error` is logged only; the teacher/CRM
+    sees `safe_message` (our own wording) or, when none is given, a generic reason."""
     with session_scope() as db:
         sub = db.query(Submission).filter_by(id=submission_id).with_for_update().first()
         if not sub or sub.status != SubmissionStatus.PENDING_AI.value:
             return False
         sub.status = SubmissionStatus.GRADING_FAILED.value
-        sub.reviewer_note = f"Grading failed: {error}"
+        # The raw provider error can carry internal details (URLs, request ids): it goes to the log,
+        # the API/CRM only sees a generic reason (plus the error class name, which is safe).
+        logger.error("grading failed for submission %s: %s", submission_id, error)
+        sub.reviewer_note = (
+            f"Grading failed: {safe_message}" if safe_message
+            else f"Grading failed ({_error_kind(error)}). Use POST /submissions/{{id}}/regrade to try again."
+        )
         return True
 
 
-def reset_for_regrade(submission_id: str, organization_id: str) -> Optional[dict]:
+def reset_for_regrade(submission_id: str, organization_id: str, actor: Optional[str] = None) -> Optional[dict]:
     """
     Puts a grading_failed or pending_review submission back to pending_ai so it can be graded
     again (e.g. after a provider outage or a prompt/model fix). Approved submissions are final
@@ -524,11 +587,98 @@ def reset_for_regrade(submission_id: str, organization_id: str) -> Optional[dict
             return None
         if sub.status not in (SubmissionStatus.GRADING_FAILED.value, SubmissionStatus.PENDING_REVIEW.value):
             raise InvalidTransition(submission_id, sub.status, "regrade")
+        if MAX_REGRADES_PER_SUBMISSION and (sub.regrade_count or 0) >= MAX_REGRADES_PER_SUBMISSION:
+            raise RegradeLimitReached(submission_id, MAX_REGRADES_PER_SUBMISSION)
+        sub.regrade_count = (sub.regrade_count or 0) + 1
+        _add_event(db, sub.id, organization_id, "regrade_requested", actor=actor,
+                   score_before=_overall_score(sub.final_result()))
         sub.status = SubmissionStatus.PENDING_AI.value
-        if sub.reviewer_note and sub.reviewer_note.startswith("Grading failed:"):
+        if sub.reviewer_note and sub.reviewer_note.startswith("Grading failed"):
             sub.reviewer_note = None
         db.flush()
         return sub.to_dict()
+
+
+def submission_exists(organization_id: str, external_submission_id: str) -> bool:
+    """True if this organization already has a submission with that external id (a client retry)."""
+    with session_scope() as db:
+        return db.query(Submission.id).filter_by(
+            organization_id=organization_id, external_submission_id=external_submission_id).first() is not None
+
+
+def delete_submission(submission_id: str, organization_id: str, actor: Optional[str] = None) -> Optional[str]:
+    """Erases a submission and everything personal attached to it (row, webhook log). Returns the
+    input file path so the caller can delete the file, "" if there was none, or None when the
+    submission does not exist for this organization. Refused (InvalidTransition) while the AI is
+    still grading it. An anonymous audit event stays behind."""
+    if not _is_uuid(submission_id):
+        return None
+    with session_scope() as db:
+        sub = db.query(Submission).filter_by(id=submission_id, organization_id=organization_id).with_for_update().first()
+        if not sub:
+            return None
+        if sub.status == SubmissionStatus.PENDING_AI.value:
+            raise InvalidTransition(submission_id, sub.status, "erase")
+        path = sub.input_file_path or ""
+        _add_event(db, sub.id, organization_id, "erased", actor=actor)
+        db.query(WebhookDelivery).filter_by(submission_id=sub.id).delete()
+        db.delete(sub)
+        return path
+
+
+def count_by_status() -> dict:
+    """{status: number of submissions} over all organizations (for /metrics)."""
+    from sqlalchemy import func
+    with session_scope() as db:
+        rows = db.query(Submission.status, func.count(Submission.id)).group_by(Submission.status).all()
+        counts = {status.value: 0 for status in SubmissionStatus}
+        counts.update({status: count for status, count in rows})
+        return counts
+
+
+def oldest_pending_ai_age_seconds() -> float:
+    """Age of the oldest submission still waiting for the AI (0 if none)."""
+    from sqlalchemy import func
+    with session_scope() as db:
+        oldest = db.query(func.min(Submission.created_at)).filter(
+            Submission.status == SubmissionStatus.PENDING_AI.value).scalar()
+        return max((_now() - oldest).total_seconds(), 0.0) if oldest else 0.0
+
+
+def list_files_to_purge(older_than_days: int, limit: int = 1000) -> list:
+    """(submission_id, file_path) of APPROVED submissions approved more than `older_than_days` ago
+    whose input file is still on disk: the teacher's decision is final, the student's original
+    file is no longer needed."""
+    cutoff = _now() - timedelta(days=older_than_days)
+    with session_scope() as db:
+        rows = (
+            db.query(Submission.id, Submission.input_file_path)
+            .filter(
+                Submission.status == SubmissionStatus.APPROVED.value,
+                Submission.approved_at < cutoff,
+                Submission.input_file_path.isnot(None),
+                Submission.input_file_path != "",
+            )
+            .order_by(Submission.approved_at.asc())
+            .limit(limit)
+            .all()
+        )
+        return [(r.id, r.input_file_path) for r in rows]
+
+
+def clear_input_file(submission_id: str) -> None:
+    """Forgets the stored file path of a submission whose file was deleted from disk."""
+    with session_scope() as db:
+        sub = db.get(Submission, submission_id)
+        if sub:
+            sub.input_file_path = ""
+
+
+def all_referenced_file_paths() -> set:
+    """Every input_file_path still referenced by a submission (to spot orphan files on disk)."""
+    with session_scope() as db:
+        return {r[0] for r in db.query(Submission.input_file_path).filter(
+            Submission.input_file_path.isnot(None), Submission.input_file_path != "").all()}
 
 
 def list_stuck_pending_ai(older_than_seconds: int, limit: int = 500) -> list:
@@ -593,6 +743,7 @@ def approve_submission(
     organization_id: str,
     corrected_result: Optional[dict] = None,
     reviewer_note: Optional[str] = None,
+    reviewer_external_id: Optional[str] = None,
 ) -> Optional[dict]:
     """
     Approves a submission -- either as-is (corrected_result=None, the AI's
@@ -619,8 +770,14 @@ def approve_submission(
             return None
         if sub.status != SubmissionStatus.PENDING_REVIEW.value:
             raise InvalidTransition(submission_id, sub.status, "approve")
+        score_before = _overall_score(sub.ai_result)
         if corrected_result is not None:
             sub.reviewed_result = corrected_result
+        _add_event(
+            db, sub.id, organization_id, "edited" if corrected_result is not None else "approved",
+            actor=reviewer_external_id, score_before=score_before,
+            score_after=_overall_score(sub.final_result()), note=reviewer_note,
+        )
         sub.status = SubmissionStatus.APPROVED.value
         sub.reviewed_at = _now()
         sub.approved_at = _now()
