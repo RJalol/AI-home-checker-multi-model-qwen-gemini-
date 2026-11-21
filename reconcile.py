@@ -51,11 +51,11 @@ def reconcile_once() -> dict:
             attempts = conn.incr(_attempt_key(submission_id))
             conn.expire(_attempt_key(submission_id), ATTEMPT_KEY_TTL_SECONDS)
             if attempts > config.RECONCILE_MAX_REQUEUES:
-                db.mark_submission_failed(
-                    submission_id,
+                reason = (
                     f"not graded after {config.RECONCILE_MAX_REQUEUES} automatic re-queues "
-                    f"(pending for {int(age_seconds)}s) -- use POST /submissions/{{id}}/regrade to try again",
+                    f"(pending for {int(age_seconds)}s) -- use POST /submissions/{{id}}/regrade to try again"
                 )
+                db.mark_submission_failed(submission_id, reason, safe_message=reason)   # our own wording: safe to show
                 summary["failed"] += 1
                 logger.warning("submission %s marked grading_failed after %s re-queues", submission_id, attempts - 1)
                 continue

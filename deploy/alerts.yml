@@ -1,0 +1,48 @@
+# Prometheus alert rules for the metrics served by GET /metrics (see metrics.py).
+# /metrics needs the X-Internal-Api-Key header. Prometheus cannot send a custom header in every
+# version, so scrape it through a small reverse proxy that adds the header (nginx:
+# `proxy_set_header X-Internal-Api-Key ...;`), or use a scraper that supports custom headers.
+# Thresholds are starting points: adjust them to your real traffic after the pilot.
+groups:
+  - name: homework-checker
+    rules:
+      - alert: GradingBacklog
+        expr: hw_queue_length{queue="homework_grading"} > 200
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "More than 200 submissions have been waiting for the AI for 10 minutes (add workers / check providers)."
+
+      - alert: SubmissionStuckPendingAI
+        expr: hw_oldest_pending_ai_seconds > 1800
+        for: 5m
+        labels: {severity: critical}
+        annotations:
+          summary: "A submission has been waiting for the AI for over 30 minutes (worker down? see docs/RUNBOOK.md)."
+
+      - alert: GradingFailuresRising
+        expr: delta(hw_submissions{status="grading_failed"}[30m]) > 20
+        for: 5m
+        labels: {severity: critical}
+        annotations:
+          summary: "Many submissions ended in grading_failed in 30 minutes (a provider is probably down)."
+
+      - alert: FailedJobsInQueue
+        expr: hw_queue_failed > 0
+        for: 15m
+        labels: {severity: warning}
+        annotations:
+          summary: "Failed RQ jobs are piling up (webhook delivery or grading)."
+
+      - alert: AISpendHigh
+        expr: hw_ai_spend_usd{period="day"} > 60
+        labels: {severity: warning}
+        annotations:
+          summary: "Estimated AI spend today is above $60 (set this to what you call abnormal for your volume)."
+
+      - alert: MetricsScrapeError
+        expr: hw_scrape_error > 0
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "/metrics cannot read one of its sources (database / redis / budget)."

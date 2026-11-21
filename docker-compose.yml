@@ -1,0 +1,63 @@
+# Full stack on one host: PostgreSQL + Redis + API + grading worker + reconciler + daily retention.
+#   cp .env.example .env     # fill in the provider keys and the secrets below
+#   docker compose up -d --build
+# APP_ENV=production makes the API refuse to start with an unsafe configuration (see config.py).
+x-app: &app
+  build: .
+  restart: unless-stopped
+  env_file: .env
+  environment: &app-env
+    APP_ENV: production
+    DATABASE_URL: postgresql+psycopg2://hw:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/homework_checker
+    REDIS_URL: redis://redis:6379/0
+    INTERNAL_API_KEY: ${INTERNAL_API_KEY:?set INTERNAL_API_KEY}
+    WEBHOOK_SIGNING_SECRET: ${WEBHOOK_SIGNING_SECRET:?set WEBHOOK_SIGNING_SECRET}
+  volumes:
+    - app-data:/app/uploads
+    - app-reports:/app/reports
+  depends_on:
+    postgres: {condition: service_healthy}
+    redis: {condition: service_healthy}
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hw
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: homework_checker
+    volumes: [pg-data:/var/lib/postgresql/data]
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U hw -d homework_checker"], interval: 10s, retries: 5}
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis-data:/data]
+    healthcheck: {test: ["CMD", "redis-cli", "ping"], interval: 10s, retries: 5}
+
+  api:
+    <<: *app
+    ports: ["8000:8000"]
+
+  worker:
+    <<: *app
+    command: ["sh", "-c", "rq worker homework_grading webhook_delivery --url $$REDIS_URL --with-scheduler"]
+    healthcheck: {disable: true}
+
+  reconciler:
+    <<: *app
+    command: ["python", "reconcile.py", "--loop", "60"]
+    healthcheck: {disable: true}
+
+  retention:
+    <<: *app
+    command: ["sh", "-c", "while true; do python retention.py; sleep 86400; done"]
+    healthcheck: {disable: true}
+
+volumes:
+  pg-data:
+  redis-data:
+  app-data:
+  app-reports:

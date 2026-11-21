@@ -14,7 +14,7 @@ import uuid
 from pathlib import Path
 from typing import Optional, Tuple
 
-from config import ALLOWED_EXTENSIONS, IMAGE_EXTENSIONS, MAX_FILE_SIZE_MB, MAX_IMAGE_SIDE_PX, UPLOAD_DIR
+from config import ALLOWED_EXTENSIONS, IMAGE_EXTENSIONS, MAX_FILE_SIZE_MB, MAX_IMAGE_PIXELS, MAX_IMAGE_SIDE_PX, UPLOAD_DIR
 
 
 class UnsupportedFileError(Exception):
@@ -86,8 +86,15 @@ def normalize_image(file_bytes: bytes, ext: str) -> Tuple[bytes, str]:
             )
 
     try:
-        image = Image.open(io.BytesIO(file_bytes))
+        image = Image.open(io.BytesIO(file_bytes))   # reads only the header: the size is known before decoding
+        if image.size[0] * image.size[1] > MAX_IMAGE_PIXELS:
+            raise UnsupportedFileError(
+                f"The image is too large ({image.size[0]}x{image.size[1]} pixels; the limit is "
+                f"{MAX_IMAGE_PIXELS:,} pixels). Take the photo at a lower resolution."
+            )
         image.load()
+    except UnsupportedFileError:
+        raise
     except Exception as exc:
         raise UnsupportedFileError(f"The image could not be read ({exc.__class__.__name__}: {exc}).") from exc
 

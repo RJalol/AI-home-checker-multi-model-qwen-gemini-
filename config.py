@@ -401,6 +401,29 @@ ALLOWED_EXTENSIONS = {
 AUDIO_EXTENSIONS = {".mp3", ".wav", ".m4a", ".ogg"}
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".heic", ".heif"}
 MAX_FILE_SIZE_MB = 25
+# A photo with more pixels than this is refused BEFORE it is decoded (a small file can expand to
+# hundreds of MB in memory: "decompression bomb"). 50 million pixels = a 7000x7000 picture.
+MAX_IMAGE_PIXELS = int(os.environ.get("MAX_IMAGE_PIXELS", "50000000"))
+
+# Field limits of POST /submissions (the database columns are 255 / 64 / 32 characters wide; a longer
+# value used to end in HTTP 500). extra_instructions goes into every prompt, so it is capped too.
+MAX_EXTRA_INSTRUCTIONS_CHARS = int(os.environ.get("MAX_EXTRA_INSTRUCTIONS_CHARS", "4000"))
+MAX_REVIEWER_NOTE_CHARS = 4000
+
+# A submission can be sent back for grading at most this many times (each one is a paid call that
+# bypasses the result cache). 0 = unlimited.
+MAX_REGRADES_PER_SUBMISSION = int(os.environ.get("MAX_REGRADES_PER_SUBMISSION", "3"))
+
+# Per-organization abuse protection for POST /submissions (a leaked key or a CRM retry loop must not
+# create unlimited paid grading). These are SAFETY nets: set them well above your real peak.
+# Fixed windows counted in Redis; 0 disables a limit.
+ORG_MAX_SUBMISSIONS_PER_MINUTE = int(os.environ.get("ORG_MAX_SUBMISSIONS_PER_MINUTE", "300"))
+ORG_MAX_SUBMISSIONS_PER_DAY = int(os.environ.get("ORG_MAX_SUBMISSIONS_PER_DAY", "50000"))
+
+# Original student files (photos of minors' homework) are deleted this many days after the teacher
+# approved the result; orphan files (no submission refers to them) after one day. 0 = keep forever.
+# Run `python retention.py` (daily) or POST /admin/retention.
+UPLOAD_RETENTION_DAYS = int(os.environ.get("UPLOAD_RETENTION_DAYS", "90"))
 
 # Uploaded photos are normalised before grading: rotated upright according to their
 # EXIF tag, and shrunk if the longest side exceeds this many pixels (a 12-megapixel phone
@@ -428,6 +451,39 @@ ALLOW_UNAUTHENTICATED_API = os.environ.get("ALLOW_UNAUTHENTICATED_API", "false")
 # headers at all: server-to-server callers (a CRM backend, the Streamlit app) don't need CORS.
 #   export CORS_ALLOW_ORIGINS="https://crm.example.com,https://teacher.example.com"
 CORS_ALLOW_ORIGINS = [o.strip() for o in os.environ.get("CORS_ALLOW_ORIGINS", "").split(",") if o.strip()]
+
+# ---------------------------------------------------------------------------
+# Production mode
+# ---------------------------------------------------------------------------
+# APP_ENV=production makes the API REFUSE TO START with an unsafe configuration (see
+# production_config_problems) instead of running with silent fallbacks. Leave it unset for
+# local development and tests.
+APP_ENV = os.environ.get("APP_ENV", "development").strip().lower()
+IS_PRODUCTION = APP_ENV == "production"
+
+_DEFAULT_DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/homework_checker"
+
+
+def production_config_problems() -> list:
+    """Human-readable reasons this configuration is not safe for production (empty list = fine)."""
+    problems = []
+    if not INTERNAL_API_KEY:
+        problems.append("INTERNAL_API_KEY is empty (the admin endpoints would answer 503).")
+    if ALLOW_UNAUTHENTICATED_API:
+        problems.append("ALLOW_UNAUTHENTICATED_API=true opens the paid endpoints to anyone.")
+    if not WEBHOOK_SIGNING_SECRET:
+        problems.append(
+            "WEBHOOK_SIGNING_SECRET is empty: webhooks would be unsigned or signed with the admin key, "
+            "and rotating the admin key would silently break every CRM's signature check."
+        )
+    elif WEBHOOK_SIGNING_SECRET == INTERNAL_API_KEY:
+        problems.append("WEBHOOK_SIGNING_SECRET must differ from INTERNAL_API_KEY.")
+    if DATABASE_URL == _DEFAULT_DATABASE_URL:
+        problems.append("DATABASE_URL is the development default (postgres:postgres@localhost).")
+    if WEBHOOK_ALLOW_PRIVATE_URLS:
+        problems.append("WEBHOOK_ALLOW_PRIVATE_URLS=true lets tenants point webhooks at your internal network.")
+    return problems
+
 
 # ---------------------------------------------------------------------------
 # Grade scale (kept here so report_generator + app agree on labels/colors)

@@ -531,7 +531,7 @@ class TestRecovery(CrmIntegrationTest):
         self.drain()
         failed = self.get(org, sid)
         self.assertEqual(failed["status"], "grading_failed")
-        self.assertTrue(failed["reviewer_note"].startswith("Grading failed:"))
+        self.assertTrue(failed["reviewer_note"].startswith("Grading failed"))
 
         for key in ALL_PROVIDERS_DOWN:
             self.backend.cfg.pop(key)
