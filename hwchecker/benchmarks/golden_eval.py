@@ -117,7 +117,14 @@ def load_cases(path) -> List[Case]:
     return cases
 
 
-def grade_with_router(case: Case) -> float:
+@dataclass
+class GradeOutcome:
+    """What grading one case returns: the AI's score and (when known) the usage block of that homework."""
+    score: float
+    usage: Optional[dict] = None
+
+
+def grade_with_router(case: Case) -> "GradeOutcome":
     """The real pipeline, built exactly as the worker builds a submission. Returns the AI's overall score."""
     from prompts import build_user_prompt
     from hwchecker.router.grading_router import GradingRouter
@@ -131,7 +138,7 @@ def grade_with_router(case: Case) -> float:
             "user_prompt": build_user_prompt("", task_text=case.task_text, answer_key=case.answer_key),
         },
     })
-    return float(result["score"])
+    return GradeOutcome(float(result["score"]), result.get("usage"))
 
 
 def _summarize(diffs: List[float], failures: int, total: int) -> dict:
@@ -149,15 +156,58 @@ def _summarize(diffs: List[float], failures: int, total: int) -> dict:
     return out
 
 
+def _usage_table(cases: List[Case], usage_by_id: Dict[str, dict], score_by_id: Dict[str, float]) -> dict:
+    """Per-homework token usage and the totals, by subject and by model."""
+    rows, by_subject, by_model = [], defaultdict(lambda: defaultdict(float)), defaultdict(lambda: defaultdict(float))
+    for case in cases:
+        usage = usage_by_id.get(case.id)
+        if usage is None:
+            continue
+        models = sorted({f"{c['provider']}:{c['model']}" for c in usage["calls"]})
+        rows.append({
+            "id": case.id, "subject": case.subject_id, "kind": case.kind,
+            "ai_score": score_by_id.get(case.id), "expected_score": case.teacher_score,
+            "calls": usage["call_count"], "models": " + ".join(models),
+            "input_tokens": usage["input_tokens"], "output_tokens": usage["output_tokens"],
+            "cached_tokens": usage["cached_tokens"], "estimated_cost_usd": usage["estimated_cost_usd"],
+            "latency_ms": usage["latency_ms"],
+        })
+        for bucket in (by_subject[case.subject_id],):
+            for key in ("input_tokens", "output_tokens", "cached_tokens", "estimated_cost_usd"):
+                bucket[key] += usage[key]
+            bucket["homeworks"] += 1
+        for call in usage["calls"]:
+            bucket = by_model[f"{call['provider']}:{call['model']}"]
+            bucket["calls"] += 1
+            bucket["input_tokens"] += call["input_tokens"]
+            bucket["output_tokens"] += call["output_tokens"]
+            bucket["estimated_cost_usd"] += call["estimated_cost_usd"]
+    n = len(rows)
+    totals = {k: round(sum(r[k] for r in rows), 6) for k in
+              ("calls", "input_tokens", "output_tokens", "cached_tokens", "estimated_cost_usd")}
+    totals["homeworks"] = n
+    if n:
+        totals["avg_input_tokens"] = round(totals["input_tokens"] / n, 1)
+        totals["avg_output_tokens"] = round(totals["output_tokens"] / n, 1)
+        totals["avg_cost_usd"] = round(totals["estimated_cost_usd"] / n, 6)
+        totals["avg_calls"] = round(totals["calls"] / n, 2)
+    round_all = lambda d: {k: {m: round(v, 6) for m, v in b.items()} for k, b in sorted(d.items())}
+    return {"rows": rows, "totals": totals, "by_subject": round_all(by_subject), "by_model": round_all(by_model)}
+
+
 def evaluate(cases: List[Case], grade_fn: Callable[[Case], float] = grade_with_router) -> dict:
-    """Runs every case through grade_fn(case) -> AI score and returns the report dict."""
+    """Runs every case through grade_fn(case) and returns the report dict. grade_fn returns the AI score
+    (a number) or a GradeOutcome(score, usage); with usage the report also has a "usage" table."""
     normal = [c for c in cases if c.kind == "normal"]
     injections = [c for c in cases if c.kind == "injection"]
 
-    rows, errors = [], []
+    rows, errors, usage_by_id = [], [], {}
     for case in cases:
         try:
-            score = float(grade_fn(case))
+            outcome = grade_fn(case)
+            score = float(outcome.score if isinstance(outcome, GradeOutcome) else outcome)
+            if isinstance(outcome, GradeOutcome) and outcome.usage:
+                usage_by_id[case.id] = outcome.usage
             rows.append({"id": case.id, "kind": case.kind, "ai_score": score, "teacher_score": case.teacher_score})
         except Exception as exc:   # one broken case must not stop the run
             errors.append({"id": case.id, "error": f"{type(exc).__name__}: {str(exc)[:200]}"})
@@ -193,7 +243,10 @@ def evaluate(cases: List[Case], grade_fn: Callable[[Case], float] = grade_with_r
         "pass_rate": round(passed / len(injections), 4) if injections else None,
         "details": injection_details,
     }
-    return {"overall": overall, "breakdown": breakdown, "injection": injection, "errors": errors}
+    report = {"overall": overall, "breakdown": breakdown, "injection": injection, "errors": errors}
+    if usage_by_id:
+        report["usage"] = _usage_table(cases, usage_by_id, ai)
+    return report
 
 
 def check_thresholds(report: dict, thresholds: Optional[dict] = None) -> List[str]:
@@ -251,6 +304,20 @@ def format_report(report: dict, problems: List[str]) -> str:
     for name, g in report["breakdown"].items():
         if g.get("graded"):
             lines.append(f"  {name:<24} n={g['cases']:<4} MAE {g['mae']:<6} bias {g['bias']:+}")
+    usage = report.get("usage")
+    if usage:
+        t = usage["totals"]
+        lines.append(
+            f"Usage: {t['homeworks']} homeworks, {t['calls']} provider calls, input {t['input_tokens']:,} / output "
+            f"{t['output_tokens']:,} / cached {t['cached_tokens']:,} tokens, estimated ${t['estimated_cost_usd']:.4f}"
+        )
+        if t["homeworks"]:
+            lines.append(
+                f"  per homework: input {t['avg_input_tokens']:,.0f}, output {t['avg_output_tokens']:,.0f}, "
+                f"${t['avg_cost_usd']:.5f}, {t['avg_calls']} calls"
+            )
+        for name, b in usage["by_model"].items():
+            lines.append(f"  {name:<32} calls {int(b['calls']):<4} in {int(b['input_tokens']):>9,} out {int(b['output_tokens']):>8,} ${b['estimated_cost_usd']:.4f}")
     for e in report["errors"][:10]:
         lines.append(f"  could not grade {e['id']}: {e['error']}")
     lines.append("RESULT: " + ("PASSED" if not problems else "FAILED"))
@@ -262,6 +329,7 @@ def main(argv=None, grade_fn: Callable[[Case], float] = grade_with_router) -> in
     parser = argparse.ArgumentParser(description="Compare the AI's scores with teachers' scores on a golden set.")
     parser.add_argument("dataset", help="JSONL golden set")
     parser.add_argument("--out", help="write the full JSON report here")
+    parser.add_argument("--usage-out", help="write one CSV row per homework: tokens in/out/cached, calls, models, estimated cost, latency")
     parser.add_argument("--baseline", help="an earlier --out report: fail if this run is worse")
     parser.add_argument("--thresholds", help="JSON file overriding DEFAULT_THRESHOLDS")
     args = parser.parse_args(argv)
@@ -276,6 +344,13 @@ def main(argv=None, grade_fn: Callable[[Case], float] = grade_with_router) -> in
     problems = check_thresholds(report, thresholds)
     if args.baseline:
         problems += compare_to_baseline(report, json.loads(Path(args.baseline).read_text()))
+    if args.usage_out and report.get("usage"):
+        import csv
+        with open(args.usage_out, "w", newline="", encoding="utf-8") as handle:
+            rows = report["usage"]["rows"]
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+            writer.writeheader()
+            writer.writerows(rows)
     if args.out:
         Path(args.out).write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(format_report(report, problems))

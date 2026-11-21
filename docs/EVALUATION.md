@@ -89,3 +89,17 @@ same vendor, which is weaker than a different vendor; the preset allows it on pu
 Gemini key. Any tier can still be overridden, e.g. `HWCHECKER_MEDIUM_MODEL=gpt-5.4-mini`.
 Treat the result as a trial of the pipeline and the data, not as the quality or cost of the production setup:
 re-run the same set on the real multi-vendor setup before deciding.
+
+## Token and cost log for every homework
+
+Every graded result now has a `usage` block: each provider call (model, input / output / cached tokens, estimated cost,
+latency) and the totals, so a grader call plus a verifier call show up together. A cache hit or a deterministic check
+has zero calls. In production the block is stored with the result.
+
+    python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl \
+        --out report.json --usage-out usage.csv
+
+`usage.csv` has one row per homework (id, subject, AI score, expected score, calls, models, input_tokens, output_tokens,
+cached_tokens, estimated_cost_usd, latency_ms). The console summary adds the totals, the per-homework averages and a
+per-model table; `report.json` also has them by subject. The cost is a list-price estimate from input and output
+tokens: it does not apply the cache discount, and image tokens are only as accurate as the provider reports them.

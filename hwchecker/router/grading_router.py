@@ -34,6 +34,7 @@ On top of that pseudocode, the router now also:
     in-process state when Redis is not available.
 """
 
+import contextvars
 import os
 import time
 from pathlib import Path
@@ -112,6 +113,26 @@ _AUDIO_EXTENSIONS = {".mp3", ".wav", ".m4a", ".ogg"}
 
 # RQ's per-job deadline exception derives from Exception: it must NOT be treated as "this provider failed"
 from hwchecker.infra.deadline import JobDeadline as _JobDeadline  # noqa: E402
+
+
+# Every provider call of the homework being graded right now (one list per grade() call, per thread/task).
+_CALL_LEDGER: contextvars.ContextVar = contextvars.ContextVar("hwchecker_call_ledger", default=None)
+
+
+def _usage_summary(calls: Optional[list]) -> dict:
+    """What one homework used: every provider call (grader, verifier, retries that returned a result)
+    and the totals. The cost is the provider's list-price estimate from input and output tokens; it does not
+    apply a cache discount, so with prompt caching the real bill is lower."""
+    calls = list(calls or [])
+    return {
+        "calls": calls,
+        "call_count": len(calls),
+        "input_tokens": sum(c["input_tokens"] for c in calls),
+        "output_tokens": sum(c["output_tokens"] for c in calls),
+        "cached_tokens": sum(c["cached_tokens"] for c in calls),
+        "estimated_cost_usd": round(sum(c["estimated_cost_usd"] for c in calls), 6),
+        "latency_ms": sum(c["latency_ms"] for c in calls),
+    }
 
 
 def _vendor_of(provider) -> Optional[str]:
@@ -254,6 +275,14 @@ class GradingRouter:
                 tokens = result.raw_tokens or {}
                 tokens_in, tokens_out = tokens.get("input", 0), tokens.get("output", 0)
                 cost = provider.estimate_cost(tokens_in, tokens_out)
+                ledger = _CALL_LEDGER.get()
+                if ledger is not None:
+                    ledger.append({
+                        "provider": _vendor_of(provider), "model": provider.name,
+                        "input_tokens": tokens_in, "output_tokens": tokens_out,
+                        "cached_tokens": tokens.get("cached", 0), "estimated_cost_usd": round(cost, 6),
+                        "latency_ms": result.latency_ms or latency_ms,
+                    })
                 log_grading_event(provider.name, tokens_in, tokens_out, cost, result.latency_ms or latency_ms, True)
                 budget.record_spend(cost)
             else:
@@ -506,6 +535,19 @@ class GradingRouter:
 
     # -- Public entry point -----------------------------------------------
     def grade(self, homework: dict) -> dict:
+        """Grades one homework. The result carries a "usage" block: tokens, estimated cost and latency of
+        every provider call this homework needed (zero calls for a cache hit or a deterministic check)."""
+        ledger: list = []
+        token = _CALL_LEDGER.set(ledger)
+        try:
+            payload = self._grade(homework)
+        finally:
+            _CALL_LEDGER.reset(token)
+        payload = dict(payload)
+        payload["usage"] = _usage_summary(ledger)
+        return payload
+
+    def _grade(self, homework: dict) -> dict:
         """
         homework: {
           "subject_id": str, "content": {"file_path": Path, "user_prompt": str, "system_prompt": str, ...},
