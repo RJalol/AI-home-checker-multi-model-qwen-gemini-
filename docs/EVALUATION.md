@@ -61,3 +61,18 @@ attempts you see. The test files are DOCX; also try the same text hand-written i
 * monthly on a fresh sample of approved submissions (the teachers' final scores are free labels: use
   `ai_result` vs `final_result` from the database, and the share of submissions teachers edited, as a
   running quality signal).
+
+## Synthetic set (no teacher needed)
+
+`eval/synthetic/` holds 72 generated homeworks (9 subjects x 8 student profiles: strong, strong with a slip,
+average, weak, answers only, careless, blank, all wrong), as DOCX and photo-like JPEG, half with an answer key.
+`python eval/make_synthetic_set.py` rebuilds it exactly (fixed seed). `expected_details.json` lists every question,
+the gold answer, what the student wrote and its score.
+
+    python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl
+    python -m hwchecker.benchmarks.golden_eval eval/injection_cases.jsonl
+
+The expected score is made by construction (correct 100, no working 90, unit or sign slip 85, partial 50, wrong or blank 0,
+then the mean). It is NOT a teacher's judgment. It finds crashes, broken file handling, weak subjects and big
+systematic errors; it cannot show the grader is as good as a teacher. Audio is not covered. The real golden set
+described above is still required before launch.
