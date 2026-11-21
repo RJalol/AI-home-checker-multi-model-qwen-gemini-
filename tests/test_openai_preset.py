@@ -78,3 +78,11 @@ class VendorDetectionTests(unittest.TestCase):
         with mock.patch.object(grading_router, "get_provider", lambda tier: sibling), \
                 mock.patch.object(grading_router, "_can_read", lambda *_: True):
             self.assertIsNone(router._pick_verifier(grader, "text"))
+
+
+class PresetModelTests(unittest.TestCase):
+    def test_one_model_for_every_openai_tier(self):
+        with mock.patch.dict(os.environ, {"HWCHECKER_PRESET": "openai", "HWCHECKER_PRESET_MODEL": "gpt-5.4-mini"}):
+            for tier in ("router", "easy", "medium", "hard", "hard_vision", "verification"):
+                self.assertEqual(registry.resolve_tier_config(tier)[:2], ("openai", "gpt-5.4-mini"))
+            self.assertEqual(registry.resolve_tier_config("audio")[0], "gemini")

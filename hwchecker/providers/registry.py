@@ -105,6 +105,9 @@ def resolve_tier_config(tier: str) -> Tuple[str, str, Optional[str]]:
     if preset and preset != "openai":
         raise ValueError(f"HWCHECKER_PRESET='{preset}' is not known. Known presets: openai")
     module, model, thinking = (OPENAI_PRESET if preset == "openai" else {}).get(tier) or TIER_DEFAULTS[tier]
+    one_model = os.environ.get("HWCHECKER_PRESET_MODEL", "").strip()
+    if preset == "openai" and one_model and module == "openai":
+        model = one_model       # one model for every OpenAI tier, for keys that cannot use the preset's models
     prefix = f"HWCHECKER_{tier.upper()}_"
     env_module = os.environ.get(prefix + "PROVIDER", "").strip().lower()
     env_model = os.environ.get(prefix + "MODEL", "").strip()
