@@ -1,0 +1,14 @@
+# Secrets -- never commit real API keys
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Runtime data created by the app
+uploads/
+reports/
+training_data/
