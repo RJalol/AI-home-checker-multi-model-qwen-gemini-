@@ -83,10 +83,11 @@ described above is still required before launch.
     export HWCHECKER_PRESET=openai
     python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl
 
-The preset puts every text and photo tier on OpenAI: `gpt-6-luna` (router, easy, medium), `gpt-6.1-terra` (hard,
-hard photo), `gpt-5.4-mini` (second opinion, fallback). The second opinion then comes from a different model of the
+The preset puts every text and photo tier on OpenAI: `gpt-4.1-mini` (router, easy, medium, hard, hard photo) and `gpt-5-mini` (second opinion, fallback). These were chosen
+from a production measurement on 2026-11-21 (26 planted errors, text and phone-style photos): `gpt-4.1-mini` found all of
+them with no false flags, `gpt-4o-mini` missed 23-27%. The second opinion then comes from a different model of the
 same vendor, which is weaker than a different vendor; the preset allows it on purpose. Audio is not covered without a
-Gemini key. Any tier can still be overridden, e.g. `HWCHECKER_MEDIUM_MODEL=gpt-5.4-mini`.
+Gemini key. Any tier can still be overridden, e.g. `HWCHECKER_MEDIUM_MODEL=gpt-5-mini`.
 Treat the result as a trial of the pipeline and the data, not as the quality or cost of the production setup:
 re-run the same set on the real multi-vendor setup before deciding.
 

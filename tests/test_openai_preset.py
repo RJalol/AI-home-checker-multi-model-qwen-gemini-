@@ -86,3 +86,17 @@ class PresetModelTests(unittest.TestCase):
             for tier in ("router", "easy", "medium", "hard", "hard_vision", "verification"):
                 self.assertEqual(registry.resolve_tier_config(tier)[:2], ("openai", "gpt-5.4-mini"))
             self.assertEqual(registry.resolve_tier_config("audio")[0], "gemini")
+
+
+class OpenAIModelSettingsTests(unittest.TestCase):
+    def test_temperature_only_for_models_that_accept_it(self):
+        from hwchecker.providers.openai import OpenAIProvider
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "test"}):
+            self.assertTrue(OpenAIProvider("gpt-4.1-mini").sends_sampling_params)
+            self.assertFalse(OpenAIProvider("gpt-5-mini").sends_sampling_params)
+
+    def test_known_models_have_real_prices(self):
+        from hwchecker.providers.openai import OpenAIProvider
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "test"}):
+            p = OpenAIProvider("gpt-4.1-mini")
+            self.assertAlmostEqual(p.estimate_cost(1_000_000, 1_000_000), 2.0)

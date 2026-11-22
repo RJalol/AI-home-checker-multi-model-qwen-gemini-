@@ -75,14 +75,17 @@ _KNOWN_MODULES = ("qwen", "gemini", "glm", "claude", "openai")
 # OpenAI chat models used here do not take recordings. Single entries are still overridable with
 # HWCHECKER_<TIER>_MODEL / _PROVIDER / _THINKING.
 OPENAI_PRESET: Dict[str, Tuple[str, str, Optional[str]]] = {
-    "router": ("openai", "gpt-6-luna", None),
-    "easy": ("openai", "gpt-6-luna", None),
-    "medium": ("openai", "gpt-6-luna", None),
-    "medium_alt": ("openai", "gpt-5.4-mini", None),
-    "hard": ("openai", "gpt-6.1-terra", None),
-    "hard_vision": ("openai", "gpt-6.1-terra", None),
-    "verification": ("openai", "gpt-5.4-mini", None),
-    "fallback": ("openai", "gpt-5.4-mini", None),
+    # gpt-4.1-mini: in a production measurement (2026-11-21, 26 planted errors, text and phone-style photos)
+    # it found every error with no false flags and read a photo in ~4.8k tokens (gpt-4o-mini: ~25k and it
+    # missed 23-27% of the errors). gpt-5-mini is the second opinion: also 100% on text, slower.
+    "router": ("openai", "gpt-4.1-mini", None),
+    "easy": ("openai", "gpt-4.1-mini", None),
+    "medium": ("openai", "gpt-4.1-mini", None),
+    "medium_alt": ("openai", "gpt-5-mini", None),
+    "hard": ("openai", "gpt-4.1-mini", None),
+    "hard_vision": ("openai", "gpt-4.1-mini", None),
+    "verification": ("openai", "gpt-5-mini", None),
+    "fallback": ("openai", "gpt-5-mini", None),
 }
 
 
