@@ -70,12 +70,47 @@ TIER_DEFAULTS: Dict[str, Tuple[str, str, Optional[str]]] = {
 
 _KNOWN_MODULES = ("qwen", "gemini", "glm", "claude", "openai")
 
+# HWCHECKER_PRESET=openai runs every text/photo tier on an OpenAI key alone (no Qwen, Gemini, GLM
+# or Claude key). It is meant for trying the pipeline out. Audio still needs a Gemini key: the
+# OpenAI chat models used here do not take recordings. Single entries are still overridable with
+# HWCHECKER_<TIER>_MODEL / _PROVIDER / _THINKING.
+OPENAI_PRESET: Dict[str, Tuple[str, str, Optional[str]]] = {
+    # gpt-4.1-mini: in a production measurement (2026-11-21, 26 planted errors, text and phone-style photos)
+    # it found every error with no false flags and read a photo in ~4.8k tokens (gpt-4o-mini: ~25k and it
+    # missed 23-27% of the errors). gpt-5-mini is the second opinion: also 100% on text, slower.
+    "router": ("openai", "gpt-4.1-mini", None),
+    "easy": ("openai", "gpt-4.1-mini", None),
+    "medium": ("openai", "gpt-4.1-mini", None),
+    "medium_alt": ("openai", "gpt-5-mini", None),
+    "hard": ("openai", "gpt-4.1-mini", None),
+    "hard_vision": ("openai", "gpt-4.1-mini", None),
+    "verification": ("openai", "gpt-5-mini", None),
+    "fallback": ("openai", "gpt-5-mini", None),
+}
+
+
+def active_preset() -> str:
+    return os.environ.get("HWCHECKER_PRESET", "").strip().lower()
+
+
+def allow_same_vendor_verification() -> bool:
+    """With a single vendor the second opinion has to come from another model of that vendor. Off by
+    default, because a sibling model tends to repeat its mistakes; the openai preset turns it on."""
+    flag = os.environ.get("HWCHECKER_ALLOW_SAME_VENDOR_VERIFY", "").strip().lower()
+    return flag in ("1", "true", "yes") or active_preset() == "openai"
+
 
 def resolve_tier_config(tier: str) -> Tuple[str, str, Optional[str]]:
     """(provider module, model name, normalised thinking) for `tier`, defaults + env overrides."""
     if tier not in TIER_DEFAULTS:
         raise ValueError(f"Unknown provider tier '{tier}'. Known tiers: {list(TIER_DEFAULTS)}")
-    module, model, thinking = TIER_DEFAULTS[tier]
+    preset = active_preset()
+    if preset and preset != "openai":
+        raise ValueError(f"HWCHECKER_PRESET='{preset}' is not known. Known presets: openai")
+    module, model, thinking = (OPENAI_PRESET if preset == "openai" else {}).get(tier) or TIER_DEFAULTS[tier]
+    one_model = os.environ.get("HWCHECKER_PRESET_MODEL", "").strip()
+    if preset == "openai" and one_model and module == "openai":
+        model = one_model       # one model for every OpenAI tier, for keys that cannot use the preset's models
     prefix = f"HWCHECKER_{tier.upper()}_"
     env_module = os.environ.get(prefix + "PROVIDER", "").strip().lower()
     env_model = os.environ.get(prefix + "MODEL", "").strip()

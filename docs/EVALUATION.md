@@ -76,3 +76,31 @@ The expected score is made by construction (correct 100, no working 90, unit or 
 then the mean). It is NOT a teacher's judgment. It finds crashes, broken file handling, weak subjects and big
 systematic errors; it cannot show the grader is as good as a teacher. Audio is not covered. The real golden set
 described above is still required before launch.
+
+## Trying it with an OpenAI key only
+
+    export OPENAI_API_KEY=...
+    export HWCHECKER_PRESET=openai
+    python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl
+
+The preset puts every text and photo tier on OpenAI: `gpt-4.1-mini` (router, easy, medium, hard, hard photo) and `gpt-5-mini` (second opinion, fallback). These were chosen
+from a production measurement on 2026-11-21 (26 planted errors, text and phone-style photos): `gpt-4.1-mini` found all of
+them with no false flags, `gpt-4o-mini` missed 23-27%. The second opinion then comes from a different model of the
+same vendor, which is weaker than a different vendor; the preset allows it on purpose. Audio is not covered without a
+Gemini key. Any tier can still be overridden, e.g. `HWCHECKER_MEDIUM_MODEL=gpt-5-mini`.
+Treat the result as a trial of the pipeline and the data, not as the quality or cost of the production setup:
+re-run the same set on the real multi-vendor setup before deciding.
+
+## Token and cost log for every homework
+
+Every graded result now has a `usage` block: each provider call (model, input / output / cached tokens, estimated cost,
+latency) and the totals, so a grader call plus a verifier call show up together. A cache hit or a deterministic check
+has zero calls. In production the block is stored with the result.
+
+    python -m hwchecker.benchmarks.golden_eval eval/synthetic/golden_synthetic.jsonl \
+        --out report.json --usage-out usage.csv
+
+`usage.csv` has one row per homework (id, subject, AI score, expected score, calls, models, input_tokens, output_tokens,
+cached_tokens, estimated_cost_usd, latency_ms). The console summary adds the totals, the per-homework averages and a
+per-model table; `report.json` also has them by subject. The cost is a list-price estimate from input and output
+tokens: it does not apply the cache discount, and image tokens are only as accurate as the provider reports them.

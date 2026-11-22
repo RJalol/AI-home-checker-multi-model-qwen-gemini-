@@ -10,6 +10,12 @@ from ._openai_protocol_base import OpenAIProtocolProvider
 # Rough published per-1M-token pricing (USD), for cost estimation/logging
 # only. Update if the provider changes pricing.
 _PRICING_PER_1M = {
+    # Measured on a production account, 2026-11-21 (OpenAI pricing page, standard tier):
+    "gpt-4o-mini": {"input": 0.15, "output": 0.60},
+    "gpt-4.1-mini": {"input": 0.40, "output": 1.60},
+    "gpt-5-mini": {"input": 0.25, "output": 2.00},
+    "gpt-5-nano": {"input": 0.05, "output": 0.40},
+    "gpt-4o": {"input": 2.50, "output": 10.00},
     "gpt-5.4-mini": {"input": 0.75, "output": 4.50},
     "gpt-5.6": {"input": 4.00, "output": 20.00},
     "gpt-5.6-luna": {"input": 0.20, "output": 1.20},
@@ -35,5 +41,8 @@ class OpenAIProvider(OpenAIProtocolProvider):
     def __init__(self, model_name: str = "gpt-5.4-mini", api_key=None, thinking=None):
         # `thinking` is accepted so the registry can treat every tier alike, but this provider has no
         # such knob: it is the cross-provider fallback and keeps OpenAI's own reasoning default.
+        # gpt-4o / gpt-4.1 take temperature; the gpt-5, gpt-6 and o-series reasoning models reject it.
+        # With temperature 0 gpt-4.1-mini gave stable grades in a production measurement.
+        self.sends_sampling_params = not model_name.startswith(("gpt-5", "gpt-6", "o1", "o3", "o4"))
         self.pricing_per_1m = _PRICING_PER_1M.get(model_name, {"input": 0.75, "output": 4.50})
         super().__init__(model_name=model_name, api_key=api_key, thinking=thinking)

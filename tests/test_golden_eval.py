@@ -143,6 +143,48 @@ class RealPipelineSmokeTest(FakeSDKTestCase):
         document = Document()
         document.add_paragraph("Question 1. Solve 2x + 6 = 14. Answer: x = 4")
         document.save(path)
-        score = ge.grade_with_router(ge.Case(id="x", subject_id="math", file=path, teacher_score=100))
-        self.assertIsInstance(score, float)
-        self.assertTrue(0 <= score <= 100)
+        outcome = ge.grade_with_router(ge.Case(id="x", subject_id="math", file=path, teacher_score=100))
+        self.assertIsInstance(outcome.score, float)
+        self.assertTrue(0 <= outcome.score <= 100)
+        self.assertIsNotNone(outcome.usage)
+        self.assertEqual(outcome.usage["call_count"], len(outcome.usage["calls"]))
+
+
+class UsageReportTests(unittest.TestCase):
+    def test_usage_table_totals_and_csv(self):
+        import csv
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        directory = Path(tmp.name)
+        path = write_set(directory, [case(1, 80), case(2, 60)])
+
+        def call(model, i, o, cost):
+            return {"provider": "openai", "model": model, "input_tokens": i, "output_tokens": o,
+                    "cached_tokens": 0, "estimated_cost_usd": cost, "latency_ms": 100}
+
+        def usage(calls):
+            return {"calls": calls, "call_count": len(calls), "input_tokens": sum(c["input_tokens"] for c in calls),
+                    "output_tokens": sum(c["output_tokens"] for c in calls), "cached_tokens": 0,
+                    "estimated_cost_usd": sum(c["estimated_cost_usd"] for c in calls), "latency_ms": 100 * len(calls)}
+
+        usages = {"c1": usage([call("a", 1000, 200, 0.01)]), "c2": usage([call("a", 3000, 400, 0.03), call("b", 3000, 300, 0.02)])}
+        fn = lambda c: ge.GradeOutcome(70, usages[c.id])
+        out_csv = directory / "usage.csv"
+        report_path = directory / "r.json"
+        code = ge.main([str(path), "--usage-out", str(out_csv), "--out", str(report_path)], grade_fn=fn)
+        self.assertIn(code, (0, 1))
+        report = json.loads(report_path.read_text())
+        totals = report["usage"]["totals"]
+        self.assertEqual((totals["homeworks"], totals["calls"], totals["input_tokens"]), (2, 3, 7000))
+        self.assertEqual(totals["avg_input_tokens"], 3500)
+        self.assertEqual(report["usage"]["by_model"]["openai:a"]["calls"], 2)
+        rows = list(csv.DictReader(out_csv.open()))
+        self.assertEqual([r["id"] for r in rows], ["c1", "c2"])
+        self.assertEqual(rows[1]["calls"], "2")
+        self.assertEqual(rows[1]["models"], "openai:a + openai:b")
+
+    def test_plain_float_grade_functions_still_work(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        report = ge.evaluate(ge.load_cases(write_set(Path(tmp.name), [case(1, 80)])), lambda c: 80)
+        self.assertNotIn("usage", report)
